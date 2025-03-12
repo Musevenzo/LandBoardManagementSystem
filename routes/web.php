@@ -11,6 +11,25 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+    Route::view('users', 'admin.users')
+    ->middleware(['auth', 'verified'])
+    ->name('users');
+
+    
+    Route::view('applications', 'admin.applications')
+    ->middleware(['auth', 'verified'])
+    ->name('applications');
+
+    
+    Route::view('plots', 'admin.plots')
+    ->middleware(['auth', 'verified'])
+    ->name('plots');
+
+    
+    Route::view('notifications', 'admin.notificattions')
+    ->middleware(['auth', 'verified'])
+    ->name('notifications');
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
