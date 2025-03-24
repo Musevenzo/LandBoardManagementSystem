@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +37,14 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+});
+
+// Admin Routes
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/users', [AdminController::class, 'index'])->name('users');
+    Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
+    Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
 });
 
 require __DIR__.'/auth.php';
