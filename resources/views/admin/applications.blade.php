@@ -3,23 +3,23 @@
         
         <!-- Page Header -->
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <h2 class="text-2xl font-bold">APPLICATIONS PAGE</h2>
+            <h2 class="text-2xl font-bold">APPLICATIONS MANAGEMENT</h2>
         </div>
 
         <!-- Search Bar -->
         <div class="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Search Applications by Date/Time</h3>
+            <h3 class="text-lg font-semibold mb-2">Search Applications by Any Field</h3>
             <input 
                 type="text" 
                 id="searchInput" 
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter date/time to search..." 
+                placeholder="Enter keyword to search..." 
             />
         </div>
 
         <!-- New Applications -->
         <h3 class="text-xl font-semibold mt-6">New Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6">
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -41,7 +41,7 @@
 
         <!-- Old Applications -->
         <h3 class="text-xl font-semibold mt-6">Old Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6">
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -63,7 +63,7 @@
 
         <!-- Denied Applications -->
         <h3 class="text-xl font-semibold mt-6">Denied Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6">
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -83,40 +83,28 @@
             <p class="text-right p-2">Total Denied Applications: 2</p>
         </div>
 
-        <!-- JavaScript for Search -->
+        <!-- Enhanced JavaScript for Search -->
         <script>
-            document.getElementById("searchInput").addEventListener("keyup", function() {
-                let searchValue = this.value.toLowerCase();
-                document.querySelectorAll("tbody tr").forEach(row => {
-                    let timestamp = row.cells[3].innerText.toLowerCase();
-                    row.style.display = timestamp.includes(searchValue) ? "" : "none";
+            document.getElementById("searchInput").addEventListener("keyup", function () {
+                let searchValue = this.value.toLowerCase(); // Get the search term
+                let tables = document.querySelectorAll(".category-table"); // Get all category tables
+
+                tables.forEach(table => {
+                    let rows = table.querySelectorAll("tbody tr"); // Get all rows in the table
+                    let hasResults = false; // Track if any rows match the search term
+
+                    rows.forEach(row => {
+                        let matches = Array.from(row.cells).some(cell => 
+                            cell.innerText.toLowerCase().includes(searchValue)
+                        ); // Check if any cell matches the search term
+                        row.style.display = matches ? "" : "none"; // Show/hide the row
+                        if (matches) hasResults = true; // Update the result tracker
+                    });
+
+                    // Hide the table if no rows match
+                    table.style.display = hasResults ? "" : "none";
                 });
             });
-
-            // Search functionality for Date/Time
-document.getElementById("searchInput").addEventListener("keyup", function () {
-    let searchValue = this.value.toLowerCase();
-    let rows = document.querySelectorAll("tbody tr");
-
-    let hasResults = false; // Track if any results match
-
-    rows.forEach(row => {
-        let dateTime = row.cells[3].innerText.toLowerCase(); // Adjusted to search in the "Submission Date/Time" column
-        let match = dateTime.includes(searchValue);
-        row.style.display = match ? "" : "none"; // Show only matching results
-
-        if (match) hasResults = true;
-    });
-
-    // Hide category tables if no results match
-    document.querySelectorAll(".category-table").forEach(table => {
-        let visibleRows = table.querySelectorAll("tbody tr:not([style*='display: none'])");
-        table.style.display = visibleRows.length ? "" : "none";
-    });
-});
-
         </script>
-
-        
     </div>
 </x-layouts.app>

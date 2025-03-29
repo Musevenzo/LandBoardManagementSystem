@@ -47,4 +47,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
 });
 
+Route::get('/application-guidelines', function () {
+    return view('application-guidelines');
+})->name('application.guidelines');
+
 require __DIR__.'/auth.php';
