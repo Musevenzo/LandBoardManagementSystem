@@ -9,9 +9,10 @@
         <div class="flex items-center justify-between space-x-4 mb-4">
             <input
                 type="text"
-                id="search for plots information "
+                id="searchPlotInput"
                 class="px-4 py-2 border border-gray-300 rounded-lg w-1/3"
-                placeholder="Search for plots information "
+                placeholder="Search for plots information"
+                onkeyup="searchPlot()"
             />
             <button
                 onclick="searchPlot()"
@@ -34,7 +35,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location of Available Plots</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-Black divide-y divide-gray-200" id="availablePlotsTableBody">
+                    <tbody class="bg-white divide-y divide-gray-200" id="availablePlotsTableBody">
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-500">12345</td>
                             <td class="px-6 py-4 text-sm text-gray-500">Gaborone City Centre</td>
@@ -65,13 +66,12 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location of Allocated Plots</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-Black divide-y divide-gray-200" id="allocatedPlotsTableBody">
+                    <tbody class="bg-white divide-y divide-gray-200" id="allocatedPlotsTableBody">
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-500">67890</td>
                             <td class="px-6 py-4 text-sm text-gray-500">Mogoditshane</td>
                             <td class="px-6 py-4 text-sm text-gray-500">600</td>
                             <td class="px-6 py-4 text-sm text-gray-500">Gaborone West</td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -81,25 +81,55 @@
 
     <script>
         function searchPlot() {
-            const searchValue = document.getElementById('searchPlotNumber').value.toLowerCase();
-            const tables = document.querySelectorAll('.category-table');
-
-            tables.forEach(table => {
-                let rows = table.querySelectorAll('tbody tr');
-                let hasResults = false;
-
-                rows.forEach(row => {
-                    // Check if any cell in the row matches the search term
-                    const matches = Array.from(row.cells).some(cell => 
-                        cell.textContent.toLowerCase().includes(searchValue)
-                    );
-                    row.style.display = matches ? '' : 'none';
-                    if (matches) hasResults = true;
-                });
-
-                // Hide the entire table if no rows match
-                table.style.display = hasResults ? '' : 'none';
+            const searchValue = document.getElementById('searchPlotInput').value.toLowerCase();
+            const availableRows = document.querySelectorAll('#availablePlotsTableBody tr');
+            const allocatedRows = document.querySelectorAll('#allocatedPlotsTableBody tr');
+            
+            // Search in Available Plots
+            let availableHasResults = false;
+            availableRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const matches = Array.from(cells).some(cell => 
+                    cell.textContent.toLowerCase().includes(searchValue)
+                );
+                row.style.display = matches ? '' : 'none';
+                if (matches) availableHasResults = true;
             });
+            
+            // Search in Allocated Plots
+            let allocatedHasResults = false;
+            allocatedRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const matches = Array.from(cells).some(cell => 
+                    cell.textContent.toLowerCase().includes(searchValue)
+                );
+                row.style.display = matches ? '' : 'none';
+                if (matches) allocatedHasResults = true;
+            });
+            
+            // Show/hide table sections based on results
+            document.querySelectorAll('h2')[1].style.display = availableHasResults ? '' : 'none';
+            document.querySelectorAll('.category-table')[0].style.display = availableHasResults ? '' : 'none';
+            document.querySelectorAll('h2')[2].style.display = allocatedHasResults ? '' : 'none';
+            document.querySelectorAll('.category-table')[1].style.display = allocatedHasResults ? '' : 'none';
+            
+            // Show message if no results
+            if (!availableHasResults && !allocatedHasResults) {
+                const noResults = document.createElement('div');
+                noResults.className = 'p-4 text-center text-gray-500';
+                noResults.textContent = 'No plots found matching your search.';
+                
+                const existingMessage = document.querySelector('.no-results-message');
+                if (!existingMessage) {
+                    noResults.classList.add('no-results-message');
+                    document.querySelector('div.flex.flex-col.gap-4').appendChild(noResults);
+                }
+            } else {
+                const existingMessage = document.querySelector('.no-results-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+            }
         }
     </script>
 </x-layouts.app>
