@@ -129,4 +129,10 @@ class AdminController extends Controller
         $application->delete(); // Delete the application
         return redirect()->route('admin.applications.index')->with('success', 'Application deleted successfully');
     }
+
+    //new adimin view 
+    public function dashboard()
+{
+    return view('admin.dashboard'); // Make sure this view exists in resources/views/admin/dashboard.blade.php
+}
 }
