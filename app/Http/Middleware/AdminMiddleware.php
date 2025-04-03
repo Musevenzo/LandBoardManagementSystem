@@ -15,10 +15,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        if(auth()->user->role != UserRole::Admin){
-            return redirect()->route("dashboard");
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized action.');
         }
+
         return $next($request);
     }
 }
