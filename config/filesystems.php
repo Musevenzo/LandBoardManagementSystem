@@ -47,6 +47,25 @@ return [
             'report' => false,
         ],
 
+        // Application documents storage (private)
+        'applications' => [
+            'driver' => 'local',
+            'root' => storage_path('app/applications'),
+            'url' => env('APP_URL').'/storage/applications',
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        // Temporary uploads storage
+        'temp' => [
+            'driver' => 'local',
+            'root' => storage_path('app/temp'),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -75,6 +94,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        // Add this if you want to make application documents publicly accessible
+        // public_path('application_docs') => storage_path('app/applications'),
     ],
 
 ];

@@ -11,15 +11,27 @@
                 <x-app-logo />
             </a>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                <flux:navlist.item icon="user" :href="route('users')" :current="request()->routeIs('users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
-                <flux:navlist.item icon="document" :href="route('applications')" :current="request()->routeIs('applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('plots')" :current="request()->routeIs('plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
-
+            @if(auth()->user()->isAdmin())
+                <!-- Admin Sidebar Content -->
+                <flux:navlist variant="outline">
+                    <flux:navlist.group :heading="__('Platform')" class="grid">
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="user" :href="route('users')" :current="request()->routeIs('users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document" :href="route('applications')" :current="request()->routeIs('applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('plots')" :current="request()->routeIs('plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
+                    </flux:navlist.group>
+                </flux:navlist>
+            @else
+                <!-- User Sidebar Content -->
+                <flux:navlist variant="outline">
+                    <flux:navlist.group :heading="__('My Account')" class="grid">
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document" :href="route('my-applications')" :current="request()->routeIs('my-applications')" wire:navigate>{{ __('My Applications') }}</flux:navlist.item>
+                        <flux:navlist.item icon="clock" :href="route('application-history')" :current="request()->routeIs('application-history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
+                        <flux:navlist.item icon="eye" :href="route('view-status')" :current="request()->routeIs('view-status')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
+                    </flux:navlist.group>
+                </flux:navlist>
+            @endif
 
             <flux:spacer />
 
