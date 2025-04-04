@@ -18,21 +18,21 @@
                 <flux:navlist variant="outline">
                     <flux:navlist.group :heading="__('Platform')" class="grid">
                         <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="user" :href="route('admin.users,index')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
+                        <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
                         <flux:navlist.item icon="document" :href="route('admin.applications.index')" :current="request()->routeIs('admin.applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
-                        <flux:navlist.item icon="home" :href="route('plots')" :current="request()->routeIs('admin.plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('admin.plots.index')" :current="request()->routeIs('admin.plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
             @endif
             
-            @if (auth()->user()->role === App\Enums\UserRole::Admin)
+            @if (auth()->user()->role === App\Enums\UserRole::User)
                 <!-- User Sidebar Content -->
                 <flux:navlist variant="outline">
                     <flux:navlist.group :heading="__('My Account')" class="grid">
                         <flux:navlist.item icon="home" :href="route('user.dashboard')" :current="request()->routeIs('user.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="document" :href="route('user.my-applications.index')" :current="request()->routeIs('user.my-applications')" wire:navigate>{{ __('My Applications') }}</flux:navlist.item>
-                        <flux:navlist.item icon="clock" :href="route('user.application-history.index')" :current="request()->routeIs('user.application-history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
-                        <flux:navlist.item icon="eye" :href="route('user.view-status.index')" :current="request()->routeIs('user.view-status')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document" :href="route('user.applications.index')" :current="request()->routeIs('user.my-applications')" wire:navigate>{{ __('My Applications') }}</flux:navlist.item>
+                        <flux:navlist.item icon="clock" :href="route('user.applications.index')" :current="request()->routeIs('user.application-history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
+                        <flux:navlist.item icon="eye" :href="route('user.applications.index')" :current="request()->routeIs('user.view-status')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
             @endif

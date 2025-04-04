@@ -13,14 +13,19 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $stats = [
-            'total_users' => User::count(),
-            'total_applications' => Application::count(),
-            'total_plots' => Plot::count(),
-            'pending_applications' => Application::where('status', 'pending')->count()
-        ];
+        
+            $total_users = User::count();
+            $total_applications = Application::count();
+            $total_plots = Plot::count();
+            $pending_applications = Application::where('status', 'pending')->count();
+       
 
-        return view('admin.dashboard', compact('stats'));
+        return view('admin.dashboard', compact(
+            'total_users',
+            'total_applications',
+            'total_plots',
+            'pending_applications',
+        ));
     }
 
     /**

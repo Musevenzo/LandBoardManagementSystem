@@ -34,7 +34,18 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
     ]);
 
     // Admin-Applications
-    Route::resource('notifications', ApplicationController::class)->names([
+    Route::resource('applications', ApplicationController::class)->names([
+        'index' => 'admin.applications.index',
+        'create' => 'admin.applications.create',
+        'store' => 'admin.applications.store',
+        'show' => 'admin.applications.show',
+        'edit' => 'admin.applications.edit',
+        'update' => 'admin.applications.update',
+        'destroy' => 'admin.applications.destroy'
+    ]);
+
+    // Admin-Notifications
+    Route::resource('notifications', NotificationController::class)->names([
         'index' => 'admin.notifications.index',
         'create' => 'admin.notifications.create',
         'store' => 'admin.notifications.store',
@@ -44,26 +55,15 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         'destroy' => 'admin.notifications.destroy'
     ]);
 
-    // Admin-Notifications
-    Route::resource('judgements', NotificationController::class)->names([
-        'index' => 'admin.judgements.index',
-        'create' => 'admin.judgements.create',
-        'store' => 'admin.judgements.store',
-        'show' => 'admin.judgements.show',
-        'edit' => 'admin.judgements.edit',
-        'update' => 'admin.judgements.update',
-        'destroy' => 'admin.judgements.destroy'
-    ]);
-
     // Admin-Plots
-    Route::resource('judgements', PlotsController::class)->names([
-        'index' => 'admin.judgements.index',
-        'create' => 'admin.judgements.create',
-        'store' => 'admin.judgements.store',
-        'show' => 'admin.judgements.show',
-        'edit' => 'admin.judgements.edit',
-        'update' => 'admin.judgements.update',
-        'destroy' => 'admin.judgements.destroy'
+    Route::resource('plots', PlotsController::class)->names([
+        'index' => 'admin.plots.index',
+        'create' => 'admin.plots.create',
+        'store' => 'admin.plots.store',
+        'show' => 'admin.plots.show',
+        'edit' => 'admin.plots.edit',
+        'update' => 'admin.plots.update',
+        'destroy' => 'admin.plots.destroy'
     ]);
 
 });
@@ -87,7 +87,7 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function(
         'destroy' => 'user.applications.destroy'
     ]);
 
-    
+
 });
 
 //===================================================================
