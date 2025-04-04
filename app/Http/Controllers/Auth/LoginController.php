@@ -20,6 +20,9 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    // redirecting 
+
+    protected $redirectTo = '/admin/dashboard';
     /**
      * Where to redirect users after login.
      *
@@ -43,4 +46,35 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    //inspect authenticated uers 
+    public function login(Request $request)
+{
+    $this->validateLogin($request);
+
+    // Attempt to log the user in
+    if ($this->attemptLogin($request)) {
+        $user = auth()->user();
+
+        // Log the user's role for debugging
+        \Log::info('Authenticated User Role: ' . $user->role);
+
+        return $this->sendLoginResponse($request);
+    }
+
+    // If authentication fails, send a failed login response
+    return $this->sendFailedLoginResponse($request);
+}
+
+// app/Http/Controllers/Auth/LoginController.php
+protected function authenticated(Request $request, $user)
+{
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+    
+    return redirect()->route('user.dashboard');
+}
+
+
 }

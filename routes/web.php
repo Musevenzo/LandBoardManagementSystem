@@ -35,33 +35,23 @@ Route::middleware(['auth'])->group(function () {
 // ADMIN-SPECIFIC ROUTES
 // ========================
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
-    // Admin Dashboard
-    //Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
-    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    // Admin Dashboard - use the dedicated DashboardController
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+        ->name('admin.dashboard');
     
-
-    /*
+    // Users
     Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
+    
+    // Plots
     Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
+    Route::get('/plots/{plot}/edit', [AdminController::class, 'editPlot'])->name('admin.plots.edit');
+    
+    // Applications
     Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
-    Route::view('/notifications', 'admin.notifications')->name('admin.notifications');
-     */
-
-     //new changes 
-        // Users
-        Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
-        Route::get('/users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
-        Route::put('/users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
-        
-        // Plots
-        Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
-        Route::get('/plots/{plot}/edit', [AdminController::class, 'editPlot'])->name('admin.plots.edit');
-        
-        // Applications
-        Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
-        Route::get('/applications/{application}/edit', [AdminController::class, 'editApplication'])->name('admin.applications.edit');
-    });
+    Route::get('/applications/{application}/edit', [AdminController::class, 'editApplication'])->name('admin.applications.edit');
+});
 
 // ========================
 // USER-SPECIFIC ROUTES
