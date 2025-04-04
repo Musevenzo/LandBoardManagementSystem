@@ -7,35 +7,39 @@
         <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="mr-5 flex items-center space-x-2" wire:navigate>
+            <a href="{{ route('admin.dashboard') }}" class="mr-5 flex items-center space-x-2" wire:navigate>
                 <x-app-logo />
             </a>
 
-            @if(auth()->user()->isAdmin())
+            
+
+            @if (auth()->user()->role === App\Enums\UserRole::Admin)
                 <!-- Admin Sidebar Content -->
                 <flux:navlist variant="outline">
                     <flux:navlist.group :heading="__('Platform')" class="grid">
-                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="user" :href="route('users')" :current="request()->routeIs('users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
-                        <flux:navlist.item icon="document" :href="route('applications')" :current="request()->routeIs('applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
-                        <flux:navlist.item icon="home" :href="route('plots')" :current="request()->routeIs('plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="user" :href="route('admin.users,index')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document" :href="route('admin.applications.index')" :current="request()->routeIs('admin.applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('plots')" :current="request()->routeIs('admin.plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
-            @else
+            @endif
+            
+            @if (auth()->user()->role === App\Enums\UserRole::Admin)
                 <!-- User Sidebar Content -->
                 <flux:navlist variant="outline">
                     <flux:navlist.group :heading="__('My Account')" class="grid">
-                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="document" :href="route('my-applications')" :current="request()->routeIs('my-applications')" wire:navigate>{{ __('My Applications') }}</flux:navlist.item>
-                        <flux:navlist.item icon="clock" :href="route('application-history')" :current="request()->routeIs('application-history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
-                        <flux:navlist.item icon="eye" :href="route('view-status')" :current="request()->routeIs('view-status')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('user.dashboard')" :current="request()->routeIs('user.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="document" :href="route('user.my-applications.index')" :current="request()->routeIs('user.my-applications')" wire:navigate>{{ __('My Applications') }}</flux:navlist.item>
+                        <flux:navlist.item icon="clock" :href="route('user.application-history.index')" :current="request()->routeIs('user.application-history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
+                        <flux:navlist.item icon="eye" :href="route('user.view-status.index')" :current="request()->routeIs('user.view-status')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
             @endif
 
             <flux:spacer />
 
-            <flux:navlist variant="outline">
+            {{-- <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
                 </flux:navlist.item>
@@ -43,7 +47,7 @@
                 <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
                 {{ __('Documentation') }}
                 </flux:navlist.item>
-            </flux:navlist>
+            </flux:navlist> --}}
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
