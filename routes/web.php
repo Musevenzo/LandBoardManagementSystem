@@ -37,11 +37,7 @@ Route::middleware(['auth'])->group(function () {
 // ========================
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
     // Admin Dashboard - use the dedicated DashboardController
-<<<<<<< HEAD
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-=======
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
->>>>>>> 70c3bcb3d9125873b52c36911e7b34c19b01dfd6
         ->name('admin.dashboard');
     
     // Users
