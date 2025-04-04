@@ -28,8 +28,8 @@ class Application extends Model
         return $this->hasMany(ApplicationDocument::class);
     }
 
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
+    // public function applications()
+    // {
+    //     return $this->hasMany(Application::class);
+    // }
 }
