@@ -9,12 +9,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// ========================
+//===================================================================
 // COMMON AUTHENTICATED ROUTES
-// ========================
+//===================================================================
 Route::middleware(['auth', 'verified'])->group(function () {
     // Settings routes (accessible by all authenticated users)
     Route::redirect('settings', 'settings/profile');
+    
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
@@ -25,49 +26,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('application.guidelines');
 });
 
-// Custom routes for user and admin dashboards
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
-    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-});
-
-// ========================
+//===================================================================
 // ADMIN-SPECIFIC ROUTES
-// ========================
+//===================================================================
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
-    // Admin Dashboard
-    //Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
-    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
-
-    /*
+    // Users
     Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
+    
+    // Plots
     Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
+    Route::get('/plots/{plot}/edit', [AdminController::class, 'editPlot'])->name('admin.plots.edit');
+    
+    // Applications
     Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
-    Route::view('/notifications', 'admin.notifications')->name('admin.notifications');
-     */
+    Route::get('/applications/{application}/edit', [AdminController::class, 'editApplication'])->name('admin.applications.edit');
+});
 
-     //new changes 
-        // Users
-        Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
-        Route::get('/users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
-        Route::put('/users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
-        
-        // Plots
-        Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
-        Route::get('/plots/{plot}/edit', [AdminController::class, 'editPlot'])->name('admin.plots.edit');
-        
-        // Applications
-        Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
-        Route::get('/applications/{application}/edit', [AdminController::class, 'editApplication'])->name('admin.applications.edit');
-    });
-
-// ========================
+//===================================================================
 // USER-SPECIFIC ROUTES
-// ========================
+//===================================================================
 Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
-    // User Dashboard
+    // Dashboard
     Route::get('/dashboard', [ApplicationController::class, 'dashboard'])->name('user.dashboard');
     
     // Application Management
@@ -81,18 +64,17 @@ Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
         
         // Application history
         Route::get('/history', [ApplicationController::class, 'history'])->name('user.application.history');
-         
-
-        Route::middleware(['auth'])->group(function () {
-            Route::get('/my-applications', [ApplicationController::class, 'index'])->name('my-applications');
-            Route::get('/application-history', [ApplicationController::class, 'history'])->name('application-history');
-            Route::get('/application-status', [ApplicationController::class, 'status'])->name('view-status');
-            Route::get('/application-status/{application}', [ApplicationController::class, 'statusDetails'])->name('view-status-details');
-        });
     });
 
+    // My Applications
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/my-applications', [ApplicationController::class, 'index'])->name('my-applications');
+        Route::get('/application-history', [ApplicationController::class, 'history'])->name('application-history');
+        Route::get('/application-status', [ApplicationController::class, 'status'])->name('view-status');
+        Route::get('/application-status/{application}', [ApplicationController::class, 'statusDetails'])->name('view-status-details');
+    });
     
-    // Legacy routes (consider deprecating these in favor of the prefixed versions above)
+    // Legacy routes (consider deprecating)
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('applications', 'admin.applications')->name('applications');
     Route::view('plots', 'admin.plots')->name('plots');
