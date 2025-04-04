@@ -27,15 +27,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Custom routes for user and admin dashboards
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
-Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard')->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+});
 
 // ========================
 // ADMIN-SPECIFIC ROUTES
 // ========================
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
     // Admin Dashboard - use the dedicated DashboardController
+<<<<<<< HEAD
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+=======
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+>>>>>>> 70c3bcb3d9125873b52c36911e7b34c19b01dfd6
         ->name('admin.dashboard');
     
     // Users

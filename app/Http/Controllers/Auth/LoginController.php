@@ -69,11 +69,11 @@ class LoginController extends Controller
 // app/Http/Controllers/Auth/LoginController.php
 protected function authenticated(Request $request, $user)
 {
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard'); // Redirect to admin dashboard
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
     }
-
-    return redirect()->route('user.dashboard'); // Redirect to user dashboard
+    
+    return redirect()->route('user.dashboard');
 }
 
 
