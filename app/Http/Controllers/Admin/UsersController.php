@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -12,7 +13,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::withCount('applications')->latest()->paginate(10);
+        return view('admin.users', compact('users'));
     }
 
     /**
@@ -44,7 +46,8 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('admin.users', compact('user'));
     }
 
     /**
@@ -52,7 +55,17 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'role' => 'required|in:admin,user'
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update($validated);
+
+        return redirect()->route('admin.users')->with('success', 'User updated successfully');
+    
     }
 
     /**
@@ -60,6 +73,9 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+    
     }
 }

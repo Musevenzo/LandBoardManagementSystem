@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
+use App\Models\Plot;
 use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
@@ -12,7 +14,13 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $applications = Application::with(['user', 'plot'])
+            ->withCount('documents')
+            ->latest()
+            ->paginate(10);
+            
+        return view('admin.applications', compact('applications'));
+    
     }
 
     /**
@@ -44,7 +52,10 @@ class ApplicationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $application = Application::with(['user', 'plot', 'documents'])->findOrFail($id);
+        $plots = Plot::where('status', 'available')->get();
+        return view('admin.applications', compact('application', 'plots'));
+
     }
 
     /**
@@ -52,7 +63,17 @@ class ApplicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'plot_id' => 'required|exists:plots,id',
+            'status' => 'required|in:pending,approved,rejected',
+            'comments' => 'nullable|string'
+        ]);
+
+        $application = Application::findOrFail($id);
+        $application->update($validated);
+
+        return redirect()->route('admin.applications')->with('success', 'Application updated successfully');
+    
     }
 
     /**
@@ -60,6 +81,9 @@ class ApplicationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $application = Application::findOrFail($id);
+        $application->delete();
+        return redirect()->route('admin.applications')->with('success', 'Application deleted successfully');
+    
     }
 }

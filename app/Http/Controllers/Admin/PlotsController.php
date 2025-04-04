@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plot;
 use Illuminate\Http\Request;
 
 class PlotsController extends Controller
@@ -12,7 +13,8 @@ class PlotsController extends Controller
      */
     public function index()
     {
-        //
+        $plots = Plot::withCount('applications')->latest()->paginate(10);
+        return view('admin.plots', compact('plots'));
     }
 
     /**
@@ -44,7 +46,8 @@ class PlotsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $plot = Plot::findOrFail($id);
+        return view('admin.plots', compact('plot'));
     }
 
     /**
@@ -52,7 +55,17 @@ class PlotsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'location' => 'required|string|max:255',
+            'size' => 'required|numeric',
+            'status' => 'required|in:available,occupied,reserved'
+        ]);
+
+        $plot = Plot::findOrFail($id);
+        $plot->update($validated);
+
+        return redirect()->route('admin.plots')->with('success', 'Plot updated successfully');
+    
     }
 
     /**
@@ -60,6 +73,9 @@ class PlotsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $plot = Plot::findOrFail($id);
+        $plot->delete();
+        return redirect()->route('admin.plots')->with('success', 'Plot deleted successfully');
+
     }
 }

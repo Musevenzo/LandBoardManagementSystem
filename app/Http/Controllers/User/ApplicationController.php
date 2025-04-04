@@ -10,28 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
 {
-    public function dashboard()
-    {
-        $user = auth()->user();
-        $applications = Application::where('user_id', $user->id)
-            ->with('plot')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $stats = [
-            'total' => Application::where('user_id', $user->id)->count(),
-            'approved' => Application::where('user_id', $user->id)->where('status', 'approved')->count(),
-            'pending' => Application::where('user_id', $user->id)->where('status', 'pending')->count()
-        ];
-
-        return view('user.dashboard', compact('applications', 'stats'));
-    }
 
     public function create()
     {
         $plots = Plot::where('status', 'available')->get();
-        return view('user.application.create', compact('plots'));
+        return view('user.application', compact('plots'));
     }
 
     public function store(Request $request)
@@ -55,7 +38,7 @@ class ApplicationController extends Controller
             $application->documents()->create(['path' => $path]);
         }
 
-        return redirect()->route('user.application.status')
+        return redirect()->route('user.application')
                ->with('success', 'Application submitted successfully!');
     }
 
@@ -66,7 +49,7 @@ class ApplicationController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('user.application.history', compact('applications'));
+        return view('user.application', compact('applications'));
     }
 
     public function status()
@@ -76,12 +59,12 @@ class ApplicationController extends Controller
         ->latest()
         ->get();
         
-    return view('user.application.status', compact('applications'));
+    return view('user.application', compact('applications'));
 }
 
     public function index()
 {
     $applications = Application::where('user_id', auth()->id())->get();
-    return view('user.applications.index', compact('applications'));
+    return view('user.applications', compact('applications'));
 }
 }

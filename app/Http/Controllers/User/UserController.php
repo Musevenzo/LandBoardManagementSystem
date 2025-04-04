@@ -3,10 +3,30 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    public function dashboard()
+    {
+        $user = auth()->user();
+        $applications = Application::where('user_id', $user->id)
+            ->with('plot')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $stats = [
+            'total' => Application::where('user_id', $user->id)->count(),
+            'approved' => Application::where('user_id', $user->id)->where('status', 'approved')->count(),
+            'pending' => Application::where('user_id', $user->id)->where('status', 'pending')->count()
+        ];
+
+        return view('user.dashboard', compact('applications', 'stats'));
+    }
+
     /**
      * Display a listing of the resource.
      */
