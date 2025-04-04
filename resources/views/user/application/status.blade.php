@@ -1,21 +1,49 @@
-<x-layouts.app title="Application Status">
-    <div class="p-6">
-        <h1 class="text-2xl font-bold mb-4">Application Status</h1>
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($applications as $application)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $application->location }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $application->status }}</td> <!-- Assuming you have a status field -->
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h1>Application Status</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            @if($applications->isEmpty())
+                <p>You have no applications yet.</p>
+            @else
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Reference #</th>
+                            <th>Plot Location</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($applications as $application)
+                        <tr>
+                            <td>APP-{{ $application->id }}</td>
+                            <td>{{ $application->plot->location }}</td>
+                            <td>
+                                <span class="badge bg-{{ 
+                                    $application->status == 'approved' ? 'success' : 
+                                    ($application->status == 'rejected' ? 'danger' : 'warning') 
+                                }}">
+                                    {{ ucfirst($application->status) }}
+                                </span>
+                            </td>
+                            <td>{{ $application->updated_at->format('M d, Y') }}</td>
+                            <td>
+                                <a href="{{ route('view-status-details', $application->id) }}" class="btn btn-sm btn-primary">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
     </div>
-</x-layouts.app>
+</div>
+@endsection

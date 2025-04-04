@@ -3,136 +3,129 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // Import the User model
-use App\Models\Plot; // Import the Plot model
-use App\Models\Application; // Import the Application model
+use App\Models\User;
+use App\Models\Plot;
+use App\Models\Application;
 
 class AdminController extends Controller
 {
-    // ==================== USERS MANAGEMENT ====================
+    // ==================== DASHBOARD ====================
+    public function dashboard()
+    {
+        $stats = [
+            'total_users' => User::count(),
+            'total_applications' => Application::count(),
+            'total_plots' => Plot::count(),
+            'pending_applications' => Application::where('status', 'pending')->count()
+        ];
 
-    /**
-     * Display a list of all users.
-     */
+        return view('admin.dashboard', compact('stats'));
+    }
+
+    // ==================== USERS MANAGEMENT ====================
     public function index()
     {
-        $users = User::all(); // Fetch all users
-        // dd($users)   //debugging:dump and die to inspect $users
-        return view('admin.users', compact('users'));
+        $users = User::withCount('applications')->latest()->paginate(10);
+        return view('admin.users.index', compact('users'));
     }
 
-    /**
-     * Show the form for editing a user.
-     */
     public function edit($id)
     {
-        $user = User::findOrFail($id); // Find the user by ID
-        return view('admin.users', compact('user'));
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
     }
 
-    /**
-     * Update a user's details.
-     */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'role' => 'required|in:admin,user'
+        ]);
+
         $user = User::findOrFail($id);
-        $user->update($request->all()); // Update user details
-        return redirect()->route('admin.users')->with('success', 'User updated successfully');
+        $user->update($validated);
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
 
-    /**
-     * Delete a user.
-     */
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete(); // Delete the user
-        return redirect()->route('admin.usersr')->with('success', 'User deleted successfully');
+        $user->delete();
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
     }
 
     // ==================== PLOTS MANAGEMENT ====================
-
-    /**
-     * Display a list of all plots.
-     */
-    public function indexPlots()
+    public function plots()
     {
-        $plots = Plot::all(); // Fetch all plots
+        $plots = Plot::withCount('applications')->latest()->paginate(10);
         return view('admin.plots.index', compact('plots'));
     }
 
-    /**
-     * Show the form for editing a plot.
-     */
     public function editPlot($id)
     {
-        $plot = Plot::findOrFail($id); // Find the plot by ID
+        $plot = Plot::findOrFail($id);
         return view('admin.plots.edit', compact('plot'));
     }
 
-    /**
-     * Update a plot's details.
-     */
     public function updatePlot(Request $request, $id)
     {
+        $validated = $request->validate([
+            'location' => 'required|string|max:255',
+            'size' => 'required|numeric',
+            'status' => 'required|in:available,occupied,reserved'
+        ]);
+
         $plot = Plot::findOrFail($id);
-        $plot->update($request->all()); // Update plot details
+        $plot->update($validated);
+
         return redirect()->route('admin.plots.index')->with('success', 'Plot updated successfully');
     }
 
-    /**
-     * Delete a plot.
-     */
     public function destroyPlot($id)
     {
         $plot = Plot::findOrFail($id);
-        $plot->delete(); // Delete the plot
+        $plot->delete();
         return redirect()->route('admin.plots.index')->with('success', 'Plot deleted successfully');
     }
 
     // ==================== APPLICATIONS MANAGEMENT ====================
-
-    /**
-     * Display a list of all applications.
-     */
-    public function indexApplications()
+    public function applications()
     {
-        $applications = Application::with('user', 'plot')->get(); // Fetch applications with user and plot details
+        $applications = Application::with(['user', 'plot'])
+            ->withCount('documents')
+            ->latest()
+            ->paginate(10);
+            
         return view('admin.applications.index', compact('applications'));
     }
 
-    /**
-     * Show the form for editing an application.
-     */
     public function editApplication($id)
     {
-        $application = Application::findOrFail($id); // Find the application by ID
-        return view('admin.applications.edit', compact('application'));
+        $application = Application::with(['user', 'plot', 'documents'])->findOrFail($id);
+        $plots = Plot::where('status', 'available')->get();
+        return view('admin.applications.edit', compact('application', 'plots'));
     }
 
-    /**
-     * Update an application's details.
-     */
     public function updateApplication(Request $request, $id)
     {
+        $validated = $request->validate([
+            'plot_id' => 'required|exists:plots,id',
+            'status' => 'required|in:pending,approved,rejected',
+            'comments' => 'nullable|string'
+        ]);
+
         $application = Application::findOrFail($id);
-        $application->update($request->all()); // Update application details
+        $application->update($validated);
+
         return redirect()->route('admin.applications.index')->with('success', 'Application updated successfully');
     }
 
-    /**
-     * Delete an application.
-     */
     public function destroyApplication($id)
     {
         $application = Application::findOrFail($id);
-        $application->delete(); // Delete the application
+        $application->delete();
         return redirect()->route('admin.applications.index')->with('success', 'Application deleted successfully');
     }
-
-    //new adimin view 
-    public function dashboard()
-{
-    return view('admin.dashboard'); // Make sure this view exists in resources/views/admin/dashboard.blade.php
-}
 }

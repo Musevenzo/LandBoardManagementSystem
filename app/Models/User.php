@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -61,5 +61,14 @@ class User extends Authenticatable
             ->implode('');
     }
     
+    public function isAdmin()
+{
+    return $this->is_admin; // or whatever logic you use to determine admin status
+}
+
+public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
     
 }
