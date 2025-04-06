@@ -53,18 +53,18 @@ class ApplicationController extends Controller
     }
 
     public function status()
-{
-    $applications = Application::where('user_id', auth()->id())
-        ->with(['plot', 'documents'])
-        ->latest()
-        ->get();
-        
-    return view('user.application', compact('applications'));
-}
+    {
+        $applications = Application::where('user_id', auth()->id())
+            ->with(['plot', 'documents'])
+            ->latest()
+            ->get();
+            
+        return view('user.application', compact('applications'));
+    }
 
     public function index()
-{
-    $applications = Application::where('user_id', auth()->id())->get();
-    return view('user.applications', compact('applications'));
-}
+    {
+        $applications = Application::where('user_id', auth()->id())->get();
+        return view('user.applications', compact('applications'));
+    }
 }

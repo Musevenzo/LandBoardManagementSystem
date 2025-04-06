@@ -15,7 +15,6 @@ class ApplicationController extends Controller
     public function index()
     {
         $applications = Application::with(['user', 'plot'])
-            ->withCount('documents')
             ->latest()
             ->paginate(10);
             
