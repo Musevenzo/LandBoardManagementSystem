@@ -13,8 +13,8 @@ class ApplicationController extends Controller
 
     public function create()
     {
-        $plots = Plot::where('status', 'available')->get();
-        return view('user.application', compact('plots'));
+        // $plots = Plot::where('status', 'available')->get();
+        return view('user.application-history');
     }
 
     public function store(Request $request)
@@ -44,12 +44,7 @@ class ApplicationController extends Controller
 
     public function history()
     {
-        $applications = Application::where('user_id', auth()->id())
-            ->with(['plot', 'documents'])
-            ->latest()
-            ->paginate(10);
-
-        return view('user.application', compact('applications'));
+        return view('user.application-history');
     }
 
     public function status()
@@ -59,12 +54,21 @@ class ApplicationController extends Controller
             ->latest()
             ->get();
             
-        return view('user.application', compact('applications'));
+        return view('user.application-status', compact('applications'));
     }
 
     public function index()
     {
-        $applications = Application::where('user_id', auth()->id())->get();
-        return view('user.applications', compact('applications'));
+        
+        return view('user.applications');
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        return view('user.applications');
+    }
+
 }

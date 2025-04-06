@@ -84,7 +84,9 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function(
         'show' => 'user.applications.show',
         'edit' => 'user.applications.edit',
         'update' => 'user.applications.update',
-        'destroy' => 'user.applications.destroy'
+        'destroy' => 'user.applications.destroy',
+        'history' => 'user.applications.history',
+        'status' => 'user.applications.status',
     ]);
 
 

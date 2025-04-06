@@ -4,7 +4,7 @@
 ?>
 <x-layouts.app title="Application History">
     <div class="container">
-        <h1>Application History</h1>
+        <h1>Applications</h1>
         
         <div class="card">
             <div class="card-body">
