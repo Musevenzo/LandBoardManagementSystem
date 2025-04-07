@@ -10,28 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
 {
-    public function dashboard()
-    {
-        $user = auth()->user();
-        $applications = Application::where('user_id', $user->id)
-            ->with('plot')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $stats = [
-            'total' => Application::where('user_id', $user->id)->count(),
-            'approved' => Application::where('user_id', $user->id)->where('status', 'approved')->count(),
-            'pending' => Application::where('user_id', $user->id)->where('status', 'pending')->count()
-        ];
-
-        return view('user.dashboard', compact('applications', 'stats'));
-    }
 
     public function create()
     {
-        $plots = Plot::where('status', 'available')->get();
-        return view('user.application.create', compact('plots'));
+        // $plots = Plot::where('status', 'available')->get();
+        return view('user.application-history');
     }
 
     public function store(Request $request)
@@ -55,33 +38,37 @@ class ApplicationController extends Controller
             $application->documents()->create(['path' => $path]);
         }
 
-        return redirect()->route('user.application.status')
+        return redirect()->route('user.application')
                ->with('success', 'Application submitted successfully!');
     }
 
     public function history()
     {
-        $applications = Application::where('user_id', auth()->id())
-            ->with(['plot', 'documents'])
-            ->latest()
-            ->paginate(10);
-
-        return view('user.application.history', compact('applications'));
+        return view('user.application-history');
     }
 
     public function status()
-{
-    $applications = Application::where('user_id', auth()->id())
-        ->with(['plot', 'documents'])
-        ->latest()
-        ->get();
-        
-    return view('user.application.status', compact('applications'));
-}
+    {
+        $applications = Application::where('user_id', auth()->id())
+            ->with(['plot', 'documents'])
+            ->latest()
+            ->get();
+            
+        return view('user.application-status', compact('applications'));
+    }
 
     public function index()
-{
-    $applications = Application::where('user_id', auth()->id())->get();
-    return view('user.applications.index', compact('applications'));
-}
+    {
+        
+        return view('user.applications');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        return view('user.applications');
+    }
+
 }

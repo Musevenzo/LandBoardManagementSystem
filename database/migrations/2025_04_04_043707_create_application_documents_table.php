@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applications', function (Blueprint $table) {
+        Schema::create('application_documents', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('application_id')->constrained()->cascadeOnDelete();
+            $table->string('path');
+            $table->string('original_name');
+            $table->string('mime_type');
+            $table->timestamps(); 
         });
     }
 
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('application_documents');
     }
 };

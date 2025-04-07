@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<x-layouts.app title="Edit User">
 <div class="container mx-auto px-4 py-6">
     <h1 class="text-2xl font-bold mb-6">Edit User</h1>
 

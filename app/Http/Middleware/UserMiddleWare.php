@@ -5,10 +5,9 @@ namespace App\Http\Middleware;
 use App\Enums\UserRole;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class UserMiddleWare
 {
     /**
      * Handle an incoming request.
@@ -17,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role != UserRole::Admin) {
+        if (auth()->user()->role != UserRole::User) {
             return redirect()->route("/");
         }
         return $next($request);

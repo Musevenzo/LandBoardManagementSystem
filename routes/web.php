@@ -1,92 +1,111 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ApplicationController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PlotsController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\User\ApplicationController as UserApplicationController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\User\ApplicationController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// ========================
-// COMMON AUTHENTICATED ROUTES
-// ========================
-Route::middleware(['auth', 'verified'])->group(function () {
-    // Settings routes (accessible by all authenticated users)
+//===================================================================
+// ADMIN ROUTES
+//===================================================================
+Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function() {
+
+    // Admin Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    // Admin-Users
+    Route::resource('users', UsersController::class)->names([
+        'index' => 'admin.users.index',
+        'create' => 'admin.users.create',
+        'store' => 'admin.users.store',
+        'show' => 'admin.users.show',
+        'edit' => 'admin.users.edit',
+        'update' => 'admin.users.update',
+        'destroy' => 'admin.users.destroy'
+    ]);
+
+    // Admin-Applications
+    Route::resource('applications', ApplicationController::class)->names([
+        'index' => 'admin.applications.index',
+        'create' => 'admin.applications.create',
+        'store' => 'admin.applications.store',
+        'show' => 'admin.applications.show',
+        'edit' => 'admin.applications.edit',
+        'update' => 'admin.applications.update',
+        'destroy' => 'admin.applications.destroy'
+    ]);
+
+    // Admin-Notifications
+    Route::resource('notifications', NotificationController::class)->names([
+        'index' => 'admin.notifications.index',
+        'create' => 'admin.notifications.create',
+        'store' => 'admin.notifications.store',
+        'show' => 'admin.notifications.show',
+        'edit' => 'admin.notifications.edit',
+        'update' => 'admin.notifications.update',
+        'destroy' => 'admin.notifications.destroy'
+    ]);
+
+    // Admin-Plots
+    Route::resource('plots', PlotsController::class)->names([
+        'index' => 'admin.plots.index',
+        'create' => 'admin.plots.create',
+        'store' => 'admin.plots.store',
+        'show' => 'admin.plots.show',
+        'edit' => 'admin.plots.edit',
+        'update' => 'admin.plots.update',
+        'destroy' => 'admin.plots.destroy'
+    ]);
+
+});
+
+//===================================================================
+// USER ROUTES
+//===================================================================
+Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function() {
+
+    // User Dashboard
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+
+    // User-Applications
+    Route::resource('applications', UserApplicationController::class)->names([
+        'index' => 'user.applications.index',
+        'create' => 'user.applications.create',
+        'store' => 'user.applications.store',
+        'show' => 'user.applications.show',
+        'edit' => 'user.applications.edit',
+        'update' => 'user.applications.update',
+        'destroy' => 'user.applications.destroy',
+        'history' => 'user.applications.history',
+        'status' => 'user.applications.status',
+    ]);
+
+
+});
+
+//===================================================================
+// LARAVEL LIVEWIRE ROUTES
+//===================================================================
+Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
+
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-    
+
     // Application guidelines (public but requires auth)
     Route::get('/application-guidelines', function () {
         return view('application-guidelines');
     })->name('application.guidelines');
-});
-
-// Custom routes for user and admin dashboards
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
-    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-});
-
-// ========================
-// ADMIN-SPECIFIC ROUTES
-// ========================
-Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
-    // Admin Dashboard - use the dedicated DashboardController
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
-        ->name('admin.dashboard');
-    
-    // Users
-    Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
-    Route::get('/users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
-    
-    // Plots
-    Route::get('/plots', [AdminController::class, 'plots'])->name('admin.plots.index');
-    Route::get('/plots/{plot}/edit', [AdminController::class, 'editPlot'])->name('admin.plots.edit');
-    
-    // Applications
-    Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications.index');
-    Route::get('/applications/{application}/edit', [AdminController::class, 'editApplication'])->name('admin.applications.edit');
-});
-
-// ========================
-// USER-SPECIFIC ROUTES
-// ========================
-Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
-    // User Dashboard
-    Route::get('/dashboard', [ApplicationController::class, 'dashboard'])->name('user.dashboard');
-    
-    // Application Management
-    Route::prefix('application')->group(function () {
-        // Create new application
-        Route::get('/create', [ApplicationController::class, 'create'])->name('user.application.create');
-        Route::post('/store', [ApplicationController::class, 'store'])->name('user.application.store');
-        
-        // View application status
-        Route::get('/status', [ApplicationController::class, 'status'])->name('user.application.status');
-        
-        // Application history
-        Route::get('/history', [ApplicationController::class, 'history'])->name('user.application.history');
-         
-
-        Route::middleware(['auth'])->group(function () {
-            Route::get('/my-applications', [ApplicationController::class, 'index'])->name('my-applications');
-            Route::get('/application-history', [ApplicationController::class, 'history'])->name('application-history');
-            Route::get('/application-status', [ApplicationController::class, 'status'])->name('view-status');
-            Route::get('/application-status/{application}', [ApplicationController::class, 'statusDetails'])->name('view-status-details');
-        });
-    });
-
-    
-    // Legacy routes (consider deprecating these in favor of the prefixed versions above)
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-    Route::view('applications', 'admin.applications')->name('applications');
-    Route::view('plots', 'admin.plots')->name('plots');
 });
 
 require __DIR__.'/auth.php';

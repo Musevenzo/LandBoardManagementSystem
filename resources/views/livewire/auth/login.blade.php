@@ -41,8 +41,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        if(auth()->user()->role === UserRole::Admin){
-            return redirect()->route("admin.dashboard")->with("sucess","Logged in successfully.");
+        if (auth()->user()->role === UserRole::Admin) {
+            return redirect()->route("admin.dashboard");
+
+        } elseif (auth()->user()->role === UserRole::User) {
+            return redirect()->route("user.dashboard");
+
+        }  else {
+            return redirect()->route("/");
         }
 
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
