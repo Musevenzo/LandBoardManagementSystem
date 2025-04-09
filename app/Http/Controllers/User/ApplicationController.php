@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Plot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
@@ -57,10 +58,15 @@ class ApplicationController extends Controller
         return view('user.application-status', compact('applications'));
     }
 
+    /**
+     * Display a listing of the user's applications.
+     */
     public function index()
     {
-        
-        return view('user.applications');
+        // Fetch all applications for the authenticated user
+        $applications = Application::where('user_id', Auth::id())->get();
+
+        return view('user.application-status', compact('applications'));
     }
 
     /**
