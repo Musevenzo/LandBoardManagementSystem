@@ -101,11 +101,16 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-
-    // Application guidelines (public but requires auth)
-    Route::get('/application-guidelines', function () {
-        return view('application-guidelines');
-    })->name('application.guidelines');
 });
+
+ // Application guidelines (public but requires auth)
+ Route::get('/application-guidelines', function () {
+    return view('application-guidelines');
+})->name('application.guidelines');
+
+//Real time tracking more information
+Route::get('/real-time-tracking', function () {
+    return view('real-time-tracking');
+})->name('real.time.tracking');
 
 require __DIR__.'/auth.php';

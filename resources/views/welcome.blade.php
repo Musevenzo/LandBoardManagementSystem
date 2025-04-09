@@ -71,12 +71,13 @@
     </a>
 </div>
 
-                <!-- Real-time Tracking -->
+                <!-- Real-time Tracking Section -->
                 <div class="bg-[#ffffff] p-4 rounded-lg shadow-xl border border-[#ececec] hover:shadow-2xl transition-all duration-300">
-                    <h3 class="text-lg font-semibold text-[#1a365d] mb-2">Real-time Tracking</h3>
-                    <p class="text-sm text-[#7f8c8d]">
-                        Monitor your application status in real-time. Get updates at every stage of the approval process.
-                    </p>
+                     <h3 class="text-lg font-semibold text-[#1a365d] mb-2">Real-time Tracking</h3>
+                     <p class="text-sm text-[#7f8c8d] mb-2"> Monitor your application status in real-time. Get updates at every stage of the approval process.</p>
+                     <a href="{{ route('real.time.tracking') }}" class="text-[#2980b9] hover:text-[#1f6f92] text-sm font-medium transition-all">
+                      Learn More About Real-Time Tracking →
+                      </a>
                 </div>
 
                 <!-- FAQs -->
@@ -120,6 +121,13 @@
                 </div>
             </div>
         </div>
+        
+
+        <div class="w-full max-w-6xl px-4 mb-6 text-center">
+         <a href="{{ route('register') }}" class="inline-block px-6 py-2 bg-[#27ae60] hover:bg-[#1d7f4d] text-white rounded-lg text-sm font-medium leading-normal transition-all duration-300 shadow-lg hover:shadow-xl">
+          Register Now
+         </a>
+         </div>
 
         <!-- Footer Section -->
         <footer class="w-full py-4 bg-[#1a365d] text-white">
