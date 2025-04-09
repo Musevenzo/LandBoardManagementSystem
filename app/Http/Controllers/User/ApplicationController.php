@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Storage;
 class ApplicationController extends Controller
 {
 
-    public function create()
-    {
-        // $plots = Plot::where('status', 'available')->get();
-        return view('user.application-history');
-    }
+       //hellen
+       public function create()
+       {
+           return view('user.create-application');
+       }
 
     public function store(Request $request)
     {
@@ -70,5 +70,7 @@ class ApplicationController extends Controller
     {
         return view('user.applications');
     }
+
+
 
 }
