@@ -32,21 +32,20 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Plot Number</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Size (sqm)</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location of Available Plots</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200" id="availablePlotsTableBody">
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-500">12345</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Gaborone City Centre</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Gaborone </td>
                             <td class="px-6 py-4 text-sm text-gray-500">500</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Tlokweng</td>
+                            
                         </tr>
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-500">11223</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Sebele</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Maun</td>
                             <td class="px-6 py-4 text-sm text-gray-500">550</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Gaborone South</td>
+                         
                         </tr>
                     </tbody>
                 </table>
@@ -63,15 +62,15 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Plot Number</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Size (sqm)</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Location of Allocated Plots</th>
+                            
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200" id="allocatedPlotsTableBody">
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-500">67890</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Mogoditshane</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">Nata</td>
                             <td class="px-6 py-4 text-sm text-gray-500">600</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Gaborone West</td>
+                            
                         </tr>
                     </tbody>
                 </table>

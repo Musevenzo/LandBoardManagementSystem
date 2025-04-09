@@ -4,7 +4,6 @@
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <h2 class="text-2xl font-bold">USERS PAGE</h2>
         </div>
-
         <!-- Search/Filter Section -->
         <div class="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm bg-white">
             <h3 class="text-lg font-semibold mb-2">Filter Users</h3>
@@ -19,7 +18,6 @@
                         <option value="3">Status</option>
                     </select>
                 </div>
-                
                 <!-- Search Input -->
                 <div class="w-full md:w-3/4">
                     <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Search term</label>
@@ -31,8 +29,7 @@
                     />
                 </div>
             </div>
-            
-            <!-- Status Filter (Bonus) -->
+            <!-- Status Filter -->
             <div class="mt-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Filter by status</label>
                 <div class="flex flex-wrap gap-2">
@@ -51,7 +48,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Users Table -->
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200">
@@ -65,7 +61,6 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-
                 <!-- Table Body -->
                 <tbody id="userTableBody" class="divide-y divide-gray-200 bg-white">
                     <!-- User Row 1 -->
@@ -120,39 +115,46 @@
             </table>
         </div>
     </div>
-
     <!-- Enhanced JavaScript for Search and Filter -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById("searchInput");
             const searchField = document.getElementById("searchField");
             const statusFilters = document.querySelectorAll(".status-filter");
-            
+
             // Function to filter the table
             function filterTable() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const fieldIndex = parseInt(searchField.value);
-                const activeStatuses = Array.from(document.querySelectorAll('.status-filter:checked')).map(el => el.value);
-                
+                const searchTerm = searchInput.value.toLowerCase().trim(); // Get search term
+                const fieldIndex = parseInt(searchField.value); // Get selected search field index
+                const activeStatuses = Array.from(statusFilters) // Get active statuses
+                    .filter(filter => filter.checked)
+                    .map(filter => filter.value);
+
+                // Get all rows in the table body
                 const rows = document.querySelectorAll("#userTableBody tr");
-                
+
                 rows.forEach(row => {
-                    const cellText = row.cells[fieldIndex].innerText.toLowerCase();
-                    const rowStatus = row.getAttribute('data-status');
-                    
-                    const matchesSearch = searchTerm === '' || cellText.includes(searchTerm);
-                    const matchesStatus = activeStatuses.includes(rowStatus);
-                    
+                    const cellText = row.cells[fieldIndex].innerText.toLowerCase(); // Get text of the selected column
+                    const rowStatus = row.getAttribute("data-status"); // Get row status
+
+                    // Check if the row matches the search term and status filters
+                    const matchesSearch = searchTerm === "" || cellText.includes(searchTerm);
+                    const matchesStatus = activeStatuses.length === 0 || activeStatuses.includes(rowStatus);
+
+                    // Show or hide the row based on the conditions
                     row.style.display = matchesSearch && matchesStatus ? "" : "none";
                 });
             }
-            
-            // Event listeners
-            searchInput.addEventListener("keyup", filterTable);
-            searchField.addEventListener("change", filterTable);
+
+            // Attach event listeners
+            searchInput.addEventListener("input", filterTable); // Listen for input changes
+            searchField.addEventListener("change", filterTable); // Listen for dropdown changes
             statusFilters.forEach(filter => {
-                filter.addEventListener("change", filterTable);
+                filter.addEventListener("change", filterTable); // Listen for checkbox changes
             });
+
+            // Initial filter to apply default state
+            filterTable();
         });
 
         // View User Function
