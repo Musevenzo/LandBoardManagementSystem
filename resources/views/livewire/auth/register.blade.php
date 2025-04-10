@@ -29,9 +29,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         event(new Registered(($user = User::create($validated))));
 
-        Auth::login($user);
+        // Auth::login($user);
 
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(route('login', absolute: false), navigate: true);
     }
 }; ?>
 <div class="fixed inset-0 flex items-center justify-center bg-no-repeat"
