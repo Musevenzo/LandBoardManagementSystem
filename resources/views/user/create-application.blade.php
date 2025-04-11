@@ -9,6 +9,13 @@
                 </div>
             </div>
         </div>
+        <!-- Success message -->
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+            <p>{{ session('success') }}</p>
+        </div>
+        @endif
+
         <!-- Form Progress -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             <div class="relative pt-1">
@@ -176,22 +183,22 @@
                             <!-- Document Uploads -->
                             <div class="sm:col-span-6 pt-6 border-t border-gray-200">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Supporting Documents</h3>
-                                <p class="mt-1 text-sm text-gray-500">Please upload the required documents.</p>
+                                <p class="mt-1 text-sm text-gray-500">Please upload the required documents. File names can be anything.</p>
                             </div>
                             <div class="sm:col-span-6">
-                                <label for="omang_copy" class="block text-sm font-medium text-gray-700">Copy of Certified Omang/ID</label>
-                                <input type="file" name="omang_copy" id="omang_copy" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+                                <label for="omang_copy" class="block text-sm font-medium text-gray-700">Copy of Certified Omang/ID *</label>
+                                <input type="file" name="omang_copy" id="omang_copy" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
                                 <p class="mt-1 text-xs text-gray-500">PDF, JPG, or PNG (Max 5MB)</p>
                             </div>
                             <div class="sm:col-span-6">
-                                <label for="proof_of_payment" class="block text-sm font-medium text-gray-700">Proof of Payment</label>
-                                <input type="file" name="proof_of_payment" id="proof_of_payment" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+                                <label for="proof_of_payment" class="block text-sm font-medium text-gray-700">Proof of Payment *</label>
+                                <input type="file" name="proof_of_payment" id="proof_of_payment" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
                                 <p class="mt-1 text-xs text-gray-500">PDF, JPG, or PNG (Max 5MB)</p>
                             </div>
                             <div class="sm:col-span-6">
                                 <label for="additional_documents" class="block text-sm font-medium text-gray-700">Additional Documents (Optional)</label>
-                                <input type="file" name="additional_documents[]" id="additional_documents" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                <p class="mt-1 text-xs text-gray-500">You can upload multiple files if needed</p>
+                                <input type="file" name="additional_documents[]" id="additional_documents" multiple accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                <p class="mt-1 text-xs text-gray-500">You can upload multiple files if needed (PDF, JPG, or PNG, Max 5MB each)</p>
                             </div>
                             <!-- Terms and Conditions -->
                             <div class="sm:col-span-6 pt-6 border-t border-gray-200">
