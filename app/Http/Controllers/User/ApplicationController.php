@@ -43,6 +43,8 @@ class ApplicationController extends Controller
                'additional_documents.*' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
                'terms_agreement' => 'required|accepted',
            ]);
+
+    
    
            // Cast checkbox values to boolean
            $validated['age_declaration'] = filter_var($request->input('age_declaration'), FILTER_VALIDATE_BOOLEAN);
@@ -110,6 +112,36 @@ class ApplicationController extends Controller
         return view('user.applications');
     }
 
+    public function edit(Application $application)
+    {
+        // Ensure the authenticated user owns the application
+        if ($application->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
+        // Return the edit view with the application data
+        return view('user.edit-application', compact('application'));
+    }
+
+    public function update(Request $request, Application $application)
+    {
+        // Ensure the authenticated user owns the application
+        if ($application->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Validate the form data
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'omang_number' => 'required|string|max:20',
+            // Add other validation rules as needed
+        ]);
+
+        // Update the application
+        $application->update($validated);
+
+        // Redirect back with a success message
+        return redirect()->route('user.applications.index')->with('success', 'Application updated successfully.');
+    }
 
 }

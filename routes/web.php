@@ -88,7 +88,9 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function(
         'history' => 'user.applications.history',
         'status' => 'user.applications.status',
     ]);
-
+//New added routes for user-status application
+Route::get('/user/applications/{application}/edit', [UserApplicationController::class, 'edit'])
+    ->name('user.edit-application');
 
 });
 
@@ -101,6 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
 });
 
  // Application guidelines (public but requires auth)

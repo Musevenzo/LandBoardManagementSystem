@@ -10,11 +10,8 @@
                 @foreach ($applications as $application)
                     <div class="p-4 bg-white rounded-lg shadow-md">
                         <h2 class="text-lg font-semibold text-gray-800">{{ $application->user->name }}</h2>
-                        <p class="text-sm text-gray-600"><strong>Email:</strong> {{ $application->user->email }}</p>
-                        <p class="text-sm text-gray-600"><strong>Plot Location:</strong> {{ $application->location }}</p>
+                        <p class="text-sm text-gray-600"><strong>Prefered Location:</strong> {{ $application->location }}</p>
                         <p class="text-sm text-gray-600"><strong>Omang Number:</strong> {{ $application->omang_number ?? 'None' }}</p>
-                        <p class="text-sm text-gray-600"><strong>Marital Status:</strong> {{ $application->marital_status ?? 'None' }}</p>
-                        <p class="text-sm text-gray-600"><strong>Ward:</strong> {{ $application->ward ?? 'None' }}</p>
                         <p class="text-sm text-gray-600"><strong>Village:</strong> {{ $application->village ?? 'None' }}</p>
                         <p class="text-sm text-gray-600"><strong>Status:</strong>
                             <span class="px-2 py-1 rounded-full text-xs font-medium
@@ -25,6 +22,13 @@
                                 {{ ucfirst($application->status) }}
                             </span>
                         </p>
+                        <!-- Edit Button -->
+                          @if ($application->status === 'pending')
+                           <a href="{{ route('user.edit-application', $application->id) }}"
+                          class="mt-2 inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                         Edit
+                          </a>
+                          @endif
                     </div>
                 @endforeach
             </div>
