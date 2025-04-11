@@ -15,9 +15,9 @@
                         <p class="text-sm text-gray-600"><strong>Village:</strong> {{ $application->village ?? 'None' }}</p>
                         <p class="text-sm text-gray-600"><strong>Status:</strong>
                             <span class="px-2 py-1 rounded-full text-xs font-medium
-                                @if ($application->status === 'pending') bg-yellow-200 text-yellow-800
+                                @if ($application->status === 'pending') bg-bg-orange-200 text-blue-800
                                 @elseif ($application->status === 'approved') bg-green-200 text-green-800
-                                @elseif ($application->status === 'rejected') bg-red-200 text-red-800
+                                @elseif ($application->status === 'rejected') bg-white-300 text-red-800
                                 @endif">
                                 {{ ucfirst($application->status) }}
                             </span>
@@ -26,7 +26,7 @@
                           @if ($application->status === 'pending')
                            <a href="{{ route('user.edit-application', $application->id) }}"
                           class="mt-2 inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                         Edit
+                         Edit Submitted Application
                           </a>
                           @endif
                     </div>

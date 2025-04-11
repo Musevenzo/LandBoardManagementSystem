@@ -7,15 +7,15 @@
         <h1 class="text-2xl font-bold mb-6">Application History</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-blue rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-bold mb-2">Total Applications</h3>
                 <p class="text-2xl font-bold text-indigo-500">{{ $totalApplications }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-blue rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-bold mb-2">Approved Applications</h3>
                 <p class="text-2xl font-bold text-green-500">{{ $approvedApplications }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-blue rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-bold mb-2">Rejected Applications</h3>
                 <p class="text-2xl font-bold text-red-500">{{ $rejectedApplications }}</p>
             </div>
