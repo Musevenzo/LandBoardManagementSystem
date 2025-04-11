@@ -78,10 +78,26 @@ class ApplicationController extends Controller
            return redirect()->route('user.dashboard')->with('success', 'Your application has been submitted successfully!');
        }
 
-    public function history()
-    {
-        return view('user.application-history');
-    }
+       public function history()
+{
+    // Fetch all applications for the authenticated user
+    $applications = Application::where('user_id', Auth::id())->get();
+
+    // Count total applications, approved, pending, and rejected applications
+    $totalApplications = $applications->count();
+    $approvedApplications = $applications->where('status', 'approved')->count();
+    $pendingApplications = $applications->where('status', 'pending')->count();
+    $rejectedApplications = $applications->where('status', 'rejected')->count();
+
+    // Pass data to the view
+    return view('user.application-history', compact(
+        'applications',
+        'totalApplications',
+        'approvedApplications',
+        'pendingApplications',
+        'rejectedApplications'
+    ));
+}
 
     public function status()
     {

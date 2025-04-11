@@ -91,6 +91,9 @@ Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function(
 //New added routes for user-status application
 Route::get('/user/applications/{application}/edit', [UserApplicationController::class, 'edit'])
     ->name('user.edit-application');
+//aplication history
+    Route::get('/user/applications/history', [UserApplicationController::class, 'history'])
+    ->name('user.application.history');
 
 });
 

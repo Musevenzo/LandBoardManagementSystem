@@ -32,7 +32,7 @@
                         <flux:navlist.item icon="home" :href="route('user.dashboard')" :current="request()->routeIs('user.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                         <flux:navlist.item icon="document" :href="route('user.applications.index')" :current="request()->routeIs('user.applications.index')" wire:navigate>{{ __('View Application Status') }}</flux:navlist.item>
                         <flux:navlist.item icon="clock" :href="route('user.applications.create')" :current="request()->routeIs('user.applications.create')" wire:navigate>{{ __('New Application') }}</flux:navlist.item>
-                        <flux:navlist.item icon="eye" :href="route('user.applications.create')" :current="request()->routeIs('user.applications.status')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
+                        <flux:navlist.item icon="eye" :href="route('user.application.history')" :current="request()->routeIs('user.application.history')" wire:navigate>{{ __('Application History') }}</flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
             @endif

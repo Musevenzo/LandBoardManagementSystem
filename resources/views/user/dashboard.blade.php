@@ -7,7 +7,7 @@
                 <div class="flex space-x-4">
                     <a href="{{ route('user.applications.create') }}" class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300">New Application</a>
                     <a href="{{ route('user.applications.index') }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">View Application Status</a>
-                    <a href="#" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300">Application History</a>
+                    <a href="{{ route('user.application.history') }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300">Application History</a>
                 </div>
             </div>
 
