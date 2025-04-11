@@ -263,5 +263,17 @@
                 this.value = '';
             }
         });
+        // Omang validation
+        document.getElementById('omang_number').addEventListener('input', function () {
+            const omang = this.value;
+
+            // Check if the Omang number is 9 digits and the 5th digit is 1 or 2
+            const isValidOmang = /^\d{4}[12]\d{4}$/.test(omang);
+
+            if (!isValidOmang) {
+                alert('Omang number must be exactly 9 digits, with the 5th digit being 1 or 2.');
+                this.value = ''; // Clear the input if invalid
+            }
+        });
     </script>
 </x-layouts.app>
