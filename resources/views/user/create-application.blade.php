@@ -263,6 +263,7 @@
                 this.value = '';
             }
         });
+        /*
         // Omang validation
         document.getElementById('omang_number').addEventListener('input', function () {
             const omang = this.value;
@@ -275,5 +276,6 @@
                 this.value = ''; // Clear the input if invalid
             }
         });
+        */
     </script>
 </x-layouts.app>
