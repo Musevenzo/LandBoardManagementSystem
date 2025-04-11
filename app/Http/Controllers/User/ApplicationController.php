@@ -50,6 +50,7 @@ class ApplicationController extends Controller
            $validated['never_owned_plot'] = filter_var($request->input('never_owned_plot'), FILTER_VALIDATE_BOOLEAN);
            $validated['spouse_plot_ownership'] = filter_var($request->input('spouse_plot_ownership', false), FILTER_VALIDATE_BOOLEAN);
            $validated['spouse_never_owned_plot'] = filter_var($request->input('spouse_never_owned_plot', false), FILTER_VALIDATE_BOOLEAN);
+           $validated['terms_agreement'] = filter_var($request->input('terms_agreement', false), FILTER_VALIDATE_BOOLEAN);
    
            // Handle file uploads
            $omangCopyPath = $request->file('omang_copy')->store('documents');
