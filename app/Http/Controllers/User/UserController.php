@@ -5,26 +5,25 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
 
     public function dashboard()
     {
-        $user = auth()->user();
-        $applications = Application::where('user_id', $user->id)
-            ->with('plot')
-            ->latest()
-            ->take(5)
-            ->get();
+        $userId = Auth::id();
 
-        $stats = [
-            'total' => Application::where('user_id', $user->id)->count(),
-            'approved' => Application::where('user_id', $user->id)->where('status', 'approved')->count(),
-            'pending' => Application::where('user_id', $user->id)->where('status', 'pending')->count()
-        ];
+        // Fetch applications for the authenticated user
+        $applications = Application::where('user_id', $userId)->get();
 
-        return view('user.dashboard', compact('applications', 'stats'));
+        // Calculate statistics
+        $totalApplications = $applications->count();
+        $pendingApplications = $applications->where('status', 'pending')->count();
+        $approvedApplications = $applications->where('status', 'approved')->count();
+
+        // Pass data to the view
+        return view('user.dashboard', compact('totalApplications', 'pendingApplications', 'approvedApplications'));
     }
 
     /**

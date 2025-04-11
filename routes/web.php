@@ -97,6 +97,10 @@ Route::get('/user/applications/{application}/edit', [UserApplicationController::
 
 });
 
+Route::prefix('user')->middleware(['auth', 'verified', 'user'])->group(function() {
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+});
+
 //===================================================================
 // LARAVEL LIVEWIRE ROUTES
 //===================================================================
