@@ -84,7 +84,7 @@ class ApplicationController extends Controller
     public function status()
     {
         $applications = Application::where('user_id', auth()->id())
-            ->with(['plot', 'documents'])
+            ->with(['user','plot', 'documents'])
             ->latest()
             ->get();
             
