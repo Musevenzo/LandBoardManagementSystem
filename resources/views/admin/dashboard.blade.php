@@ -5,7 +5,7 @@
             <div class="flex items-center gap-4">
                 <img src="{{ asset('images/logo.PNG') }}" alt="eLAND Botswana Logo" class="h-12 w-auto rounded-lg border-2 border-blue-100 shadow-sm">
                 <div>
-                    <p class="text-sm text-blue-600 font-medium">WELCOME BACK </p>
+                    <p class="text-sm text-blue-600 font-medium">WELCOME BACK {{ auth()->user()->name }}</p>
                 </div>
             </div>
             <div class="relative">
@@ -19,8 +19,8 @@
             <div class="p-6 bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-md border border-blue-100 flex items-center justify-between transition-all hover:shadow-lg hover:-translate-y-1">
                 <div>
                     <h3 class="text-lg font-semibold text-blue-800">Total Users</h3>
-                    <p class="text-3xl font-bold text-blue-600">1,234</p>
-                    <p class="text-xs text-blue-500 mt-1">↑ 12% from last month</p>
+                    <p class="text-3xl font-bold text-blue-600">{{ $total_users }}</p>
+                    <p class="text-xs text-blue-500 mt-1">{{ $total_users > 0 ? '↑' : '↓' }} from last month</p>
                 </div>
                 <div class="p-3 bg-blue-100/50 rounded-xl border border-blue-200">
                     <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,8 +33,8 @@
             <div class="p-6 bg-gradient-to-br from-white to-green-50 rounded-xl shadow-md border border-green-100 flex items-center justify-between transition-all hover:shadow-lg hover:-translate-y-1">
                 <div>
                     <h3 class="text-lg font-semibold text-green-800">Total Applications</h3>
-                    <p class="text-3xl font-bold text-green-600">567</p>
-                    <p class="text-xs text-green-500 mt-1">↑ 8% from last month</p>
+                    <p class="text-3xl font-bold text-green-600">{{ $total_applications }}</p>
+                    <p class="text-xs text-green-500 mt-1">{{ $total_applications > 0 ? '↑' : '↓' }} from last month</p>
                 </div>
                 <div class="p-3 bg-green-100/50 rounded-xl border border-green-200">
                     <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,8 +47,8 @@
             <div class="p-6 bg-gradient-to-br from-white to-purple-50 rounded-xl shadow-md border border-purple-100 flex items-center justify-between transition-all hover:shadow-lg hover:-translate-y-1">
                 <div>
                     <h3 class="text-lg font-semibold text-purple-800">Total Plots</h3>
-                    <p class="text-3xl font-bold text-purple-600">89</p>
-                    <p class="text-xs text-purple-500 mt-1">↑ 5% from last month</p>
+                    <p class="text-3xl font-bold text-purple-600">{{ $total_plots }}</p>
+                    <p class="text-xs text-purple-500 mt-1">{{ $total_plots > 0 ? '↑' : '↓' }} from last month</p>
                 </div>
                 <div class="p-3 bg-purple-100/50 rounded-xl border border-purple-200">
                     <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,47 +64,40 @@
                 <h3 class="text-xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                     Notifications
                 </h3>
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">3 New</span>
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{{ $pending_applications }} Pending</span>
             </div>
             <div class="space-y-3">
-                <!-- Notification 1 -->
-                <div class="flex items-center p-4 bg-blue-50/50 rounded-lg border border-blue-100 hover:bg-blue-100/30 transition-colors">
-                    <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                <!-- Render dynamic notifications here -->
+                @if(isset($recentApplications) && count($recentApplications) > 0)
+                    @foreach($recentApplications as $application)
+                    <div class="flex items-center p-4 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-50/50 rounded-lg border border-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 hover:bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100/30 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 rounded-lg">
+                            <svg class="w-5 h-5 text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if($application->status === 'approved')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                @elseif($application->status === 'rejected')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                @else
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                @endif
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">
+                                {{ $application->status === 'approved' ? 'Application approved: ' : ($application->status === 'rejected' ? 'Application denied: ' : 'New application: ') }}
+                                {{ $application->user->name }}
+                            </p>
+                            <p class="text-xs text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600 font-medium">
+                                {{ $application->created_at->diffForHumans() }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-700">New user registered: John Doe</p>
-                        <p class="text-xs text-blue-600 font-medium">2 minutes ago</p>
+                    @endforeach
+                @else
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-500">No recent applications found.</p>
                     </div>
-                </div>
-                
-                <!-- Notification 2 -->
-                <div class="flex items-center p-4 bg-green-50/50 rounded-lg border border-green-100 hover:bg-green-100/30 transition-colors">
-                    <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-700">Application approved: Plot 123</p>
-                        <p class="text-xs text-green-600 font-medium">10 minutes ago</p>
-                    </div>
-                </div>
-                
-                <!-- Notification 3 -->
-                <div class="flex items-center p-4 bg-red-50/50 rounded-lg border border-red-100 hover:bg-red-100/30 transition-colors">
-                    <div class="flex-shrink-0 p-2 bg-red-100 rounded-lg">
-                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-700">Application denied: Plot 456</p>
-                        <p class="text-xs text-red-600 font-medium">1 hour ago</p>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
 
@@ -114,34 +107,35 @@
                 Recent Activity
             </h3>
             <div class="space-y-3">
-                <!-- Activity 1 -->
-                <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
-                    <div class="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
-                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                <!-- Render dynamic activities here -->
+                @if(isset($recentActivities) && count($recentActivities) > 0)
+                    @foreach($recentActivities as $activity)
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-{{ $activity->type === 'plot' ? 'blue' : 'green' }}-100 rounded-lg">
+                            <svg class="w-5 h-5 text-{{ $activity->type === 'plot' ? 'blue' : 'green' }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if($activity->type === 'plot')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                @else
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                @endif
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">{{ $activity->description }}</p>
+                            <p class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</p>
+                        </div>
+                        @if($activity->is_new)
+                        <div class="ml-auto px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                            New
+                        </div>
+                        @endif
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-700">New plot added: Plot 789</p>
-                        <p class="text-xs text-gray-500">5 minutes ago</p>
+                    @endforeach
+                @else
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-500">No recent activity found.</p>
                     </div>
-                    <div class="ml-auto px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                        New
-                    </div>
-                </div>
-                
-                <!-- Activity 2 -->
-                <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-gray-100 transition-colors">
-                    <div class="flex-shrink-0 p-2 bg-green-100 rounded-lg">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-700">User updated: Jane Smith</p>
-                        <p class="text-xs text-gray-500">15 minutes ago</p>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
