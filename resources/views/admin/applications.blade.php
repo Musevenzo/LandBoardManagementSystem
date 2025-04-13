@@ -1,110 +1,123 @@
-<x-layouts.app title="Applications">
+<x-layouts.app title="Land Applications">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        
         <!-- Page Header -->
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <h2 class="text-2xl font-bold">APPLICATIONS MANAGEMENT</h2>
         </div>
-
-        <!-- Search Bar -->
-        <div class="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Search Applications by Any Field</h3>
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter keyword to search..." 
-            />
+        
+        <!-- Search/Filter Section -->
+        <div class="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm bg-white">
+            <h3 class="text-lg font-semibold mb-2">Filter Applications</h3>
+            <form action="{{ route('admin.applications.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <!-- Search Field Dropdown -->
+                <div class="w-full md:w-1/4">
+                    <label for="searchField" class="block text-sm font-medium text-gray-700 mb-1">Search by</label>
+                    <select id="searchField" name="field" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="id" {{ request('field') == 'id' ? 'selected' : '' }}>Application ID</option>
+                        <option value="applicant" {{ request('field') == 'applicant' ? 'selected' : '' }}>Applicant Name</option>
+                        <option value="omang" {{ request('field') == 'omang' ? 'selected' : '' }}>Omang Number</option>
+                        <option value="location" {{ request('field') == 'location' ? 'selected' : '' }}>Location</option>
+                    </select>
+                </div>
+                
+                <!-- Search Input -->
+                <div class="w-full md:w-3/4">
+                    <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-1">Search term</label>
+                    <div class="flex">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            name="search"
+                            value="{{ request('search') }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter search term..." 
+                        />
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Status Filter -->
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Filter by status</label>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('admin.applications.index', ['status' => 'pending']) }}" 
+                       class="px-3 py-1 rounded-full {{ request('status') == 'pending' ? 'bg-yellow-600 text-white' : 'bg-yellow-100 text-yellow-800' }}">
+                        Pending
+                    </a>
+                    <a href="{{ route('admin.applications.index', ['status' => 'approved']) }}" 
+                       class="px-3 py-1 rounded-full {{ request('status') == 'approved' ? 'bg-green-600 text-white' : 'bg-green-100 text-green-800' }}">
+                        Approved
+                    </a>
+                    <a href="{{ route('admin.applications.index', ['status' => 'rejected']) }}" 
+                       class="px-3 py-1 rounded-full {{ request('status') == 'rejected' ? 'bg-red-600 text-white' : 'bg-red-100 text-red-800' }}">
+                        Rejected
+                    </a>
+                    <a href="{{ route('admin.applications.index') }}" 
+                       class="px-3 py-1 rounded-full {{ !request('status') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        All Applications
+                    </a>
+                </div>
+            </div>
         </div>
-
-        <!-- New Applications -->
-        <h3 class="text-xl font-semibold mt-6">New Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
+        
+        <!-- Applications Table -->
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <!-- Table Header -->
+                <thead class="bg-gradient-to-r from-blue-500 to-green-500 text-white">
                     <tr>
-                        <th>Application ID</th>
-                        <th>Applicant Name</th>
-                        <th>Location</th>
-                        <th>Submission Date/Time</th>
-                        <th>Total Applications</th>
-                        <th>Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">App ID</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Applicant Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Omang Number</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date Applied</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="newApps">
-                    <tr><td>001</td><td>John Doe</td><td>Gaborone</td><td>2025-03-21 10:30 AM</td><td>3</td><td>Pending</td></tr>
-                    <tr><td>002</td><td>Jane Smith</td><td>Francistown</td><td>2025-03-21 11:45 AM</td><td>2</td><td>Pending</td></tr>
+                
+                <!-- Table Body -->
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @forelse($applications as $application)
+                        <tr class="hover:bg-blue-50 {{ $loop->even ? 'bg-blue-100' : '' }}">
+                            <td class="px-6 py-4 font-medium text-gray-800">{{ $application->id }}</td>
+                            <td class="px-6 py-4 text-gray-800">{{ $application->user->name }}</td>
+                            <td class="px-6 py-4 text-gray-800">{{ $application->omang_number }}</td>
+                            <td class="px-6 py-4 text-gray-800">{{ $application->location }}</td>
+                            <td class="px-6 py-4 text-gray-800">{{ $application->created_at->format('Y-m-d') }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium
+                                    {{ $application->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                      ($application->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                    {{ ucfirst($application->status) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('admin.applications.show', $application->id) }}" class="text-blue-600 hover:text-blue-800 mr-2">View</a>
+                                <a href="{{ route('admin.applications.edit', $application->id) }}" class="text-yellow-600 hover:text-yellow-800 mr-2">Review</a>
+                                <form action="{{ route('admin.applications.destroy', $application->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800" 
+                                            onclick="return confirm('Are you sure you want to delete this application?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">No applications found</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
-            <p class="text-right p-2">Total New Applications: 2</p>
         </div>
-
-        <!-- Old Applications -->
-        <h3 class="text-xl font-semibold mt-6">Old Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th>Application ID</th>
-                        <th>Applicant Name</th>
-                        <th>Location</th>
-                        <th>Submission Date/Time</th>
-                        <th>Total Applications</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="oldApps">
-                    <tr><td>003</td><td>Mike Johnson</td><td>Mahalapye</td><td>2025-02-10 09:20 AM</td><td>4</td><td>Approved</td></tr>
-                    <tr><td>004</td><td>Sarah Brown</td><td>Palapye</td><td>2025-02-05 02:15 PM</td><td>3</td><td>Approved</td></tr>
-                </tbody>
-            </table>
-            <p class="text-right p-2">Total Old Applications: 2</p>
+        
+        <!-- Pagination -->
+        <div class="mt-4">
+            {{ $applications->links() }}
         </div>
-
-        <!-- Denied Applications -->
-        <h3 class="text-xl font-semibold mt-6">Denied Applications</h3>
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-6 category-table">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th>Application ID</th>
-                        <th>Applicant Name</th>
-                        <th>Location</th>
-                        <th>Submission Date/Time</th>
-                        <th>Total Applications</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="deniedApps">
-                    <tr><td>005</td><td>Emma White</td><td>Maun</td><td>2025-01-15 10:00 AM</td><td>1</td><td>Denied</td></tr>
-                    <tr><td>006</td><td>David Green</td><td>Kanye</td><td>2025-01-20 03:40 PM</td><td>2</td><td>Denied</td></tr>
-                </tbody>
-            </table>
-            <p class="text-right p-2">Total Denied Applications: 2</p>
-        </div>
-
-        <!-- Enhanced JavaScript for Search -->
-        <script>
-            document.getElementById("searchInput").addEventListener("keyup", function () {
-                let searchValue = this.value.toLowerCase(); // Get the search term
-                let tables = document.querySelectorAll(".category-table"); // Get all category tables
-
-                tables.forEach(table => {
-                    let rows = table.querySelectorAll("tbody tr"); // Get all rows in the table
-                    let hasResults = false; // Track if any rows match the search term
-
-                    rows.forEach(row => {
-                        let matches = Array.from(row.cells).some(cell => 
-                            cell.innerText.toLowerCase().includes(searchValue)
-                        ); // Check if any cell matches the search term
-                        row.style.display = matches ? "" : "none"; // Show/hide the row
-                        if (matches) hasResults = true; // Update the result tracker
-                    });
-
-                    // Hide the table if no rows match
-                    table.style.display = hasResults ? "" : "none";
-                });
-            });
-        </script>
     </div>
 </x-layouts.app>

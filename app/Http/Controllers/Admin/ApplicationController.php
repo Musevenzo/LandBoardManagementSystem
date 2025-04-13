@@ -12,14 +12,34 @@ class ApplicationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $applications = Application::with(['user', 'plot'])
-            ->latest()
-            ->paginate(10);
+        $query = Application::with('user');
+        
+        // Apply search filter
+        if ($request->filled('search') && $request->filled('field')) {
+            $field = $request->input('field');
+            $search = $request->input('search');
             
+            if ($field === 'id') {
+                $query->where('id', 'LIKE', "%{$search}%");
+            } elseif ($field === 'applicant') {
+                $query->whereHas('user', function($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+            } elseif (in_array($field, ['omang', 'location'])) {
+                $query->where($field, 'LIKE', "%{$search}%");
+            }
+        }
+        
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        
+        $applications = $query->latest()->paginate(10);
+        
         return view('admin.applications', compact('applications'));
-    
     }
 
     /**
