@@ -11,9 +11,27 @@ class PlotsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $plots = Plot::withCount('applications')->latest()->paginate(10);
+        $query = Plot::query();
+        
+        // Apply search filter
+        if ($request->filled('search') && $request->filled('field')) {
+            $field = $request->input('field');
+            $search = $request->input('search');
+            
+            if (in_array($field, ['id', 'location', 'size', 'plot_number'])) {
+                $query->where($field, 'LIKE', "%{$search}%");
+            }
+        }
+        
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        
+        $plots = $query->latest()->paginate(10);
+        
         return view('admin.plots', compact('plots'));
     }
 
