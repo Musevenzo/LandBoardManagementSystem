@@ -11,9 +11,27 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::withCount('applications')->latest()->paginate(10);
+        $query = User::query();
+        
+        // Apply search filter
+        if ($request->filled('search') && $request->filled('field')) {
+            $field = $request->input('field');
+            $search = $request->input('search');
+            
+            if (in_array($field, ['id', 'name', 'email', 'role'])) {
+                $query->where($field, 'LIKE', "%{$search}%");
+            }
+        }
+        
+        // Apply role filter
+        if ($request->filled('role')) {
+            $query->where('role', $request->input('role'));
+        }
+        
+        $users = $query->latest()->paginate(10);
+        
         return view('admin.users', compact('users'));
     }
 
