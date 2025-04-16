@@ -10,7 +10,10 @@ class Plot extends Model
     use HasFactory;
 
     protected $fillable = [
-        'location', 'size', 'status', 'description'
+        'plot_number',
+        'location',
+        'size',
+        'status',
     ];
 
     public function applications()
