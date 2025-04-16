@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PlotsController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\PlotController;
 use App\Http\Controllers\User\ApplicationController as UserApplicationController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -60,8 +61,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         'index' => 'admin.plots.index',
         'create' => 'admin.plots.create',
         'store' => 'admin.plots.store',
-        'show' => 'admin.plots.show',
-        'edit' => 'admin.plots.edit',
+        'show' => 'admin.plot-show',
+        'edit' => 'admin.plot-edit',
         'update' => 'admin.plots.update',
         'destroy' => 'admin.plots.destroy'
     ]);
@@ -70,6 +71,12 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('applications', ApplicationController::class)->only(['index', 'show', 'edit', 'update']);
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('plots', PlotController::class);
+    Route::get('plots/{plot}', [PlotController::class, 'show'])->name('plot-show');
+    Route::get('plots/{plot}/edit', [PlotController::class, 'edit'])->name('plot-edit');
 });
 
 //===================================================================
