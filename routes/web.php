@@ -68,6 +68,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
 });
 
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::resource('applications', ApplicationController::class)->only(['index', 'show', 'edit', 'update']);
+});
+
 //===================================================================
 // USER ROUTES
 //===================================================================

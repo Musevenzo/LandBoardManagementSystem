@@ -61,38 +61,36 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $application = Application::findOrFail($id);
+        // Update the view path to locate the file in the correct directory
+        return view('admin.show', compact('application'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $application = Application::with(['user', 'plot', 'documents'])->findOrFail($id);
-        $plots = Plot::where('status', 'available')->get();
-        return view('admin.applications', compact('application', 'plots'));
-
+        $application = Application::findOrFail($id);
+        // Update the view path to locate the file in the correct directory
+        return view('admin.edit', compact('application'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'plot_id' => 'required|exists:plots,id',
+        $application = Application::findOrFail($id);
+        $request->validate([
             'status' => 'required|in:pending,approved,rejected',
-            'comments' => 'nullable|string'
         ]);
 
-        $application = Application::findOrFail($id);
-        $application->update($validated);
+        $application->update(['status' => $request->status]);
 
-        return redirect()->route('admin.applications')->with('success', 'Application updated successfully');
-    
+        return redirect()->route('admin.applications.index')->with('success', 'Application status updated successfully.');
     }
 
     /**
