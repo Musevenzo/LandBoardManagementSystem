@@ -64,4 +64,5 @@ class Application extends Model
      {
          return $this->hasMany(Application::class);
      }
+     
 }
