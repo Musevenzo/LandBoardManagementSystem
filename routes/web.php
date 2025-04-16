@@ -67,6 +67,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         'destroy' => 'admin.plots.destroy'
     ]);
 
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('admin.users.show');
+
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
@@ -78,6 +80,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('plots/{plot}', [PlotController::class, 'show'])->name('plot-show');
     Route::get('plots/{plot}/edit', [PlotController::class, 'edit'])->name('plot-edit');
 });
+
+Route::get('/admin/users/{id}', [UsersController::class, 'show'])->name('admin.users.show');
 
 //===================================================================
 // USER ROUTES

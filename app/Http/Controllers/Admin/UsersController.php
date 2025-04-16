@@ -56,7 +56,8 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id); // Retrieve the user by ID or throw a 404 error if not found
+        return view('admin.user-show', compact('user')); // Correct view file name
     }
 
     /**
@@ -96,4 +97,5 @@ class UsersController extends Controller
         return redirect()->route('admin.users')->with('success', 'User deleted successfully');
     
     }
+
 }
