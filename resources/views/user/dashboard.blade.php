@@ -31,6 +31,65 @@
                 </ul>
             </div>
 
+            <!-- Notifications Section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Your Application Notifications</h2>
+                    @if($unreadNotificationsCount > 0)
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                        {{ $unreadNotificationsCount }} New
+                    </span>
+                    @endif
+                </div>
+                
+                <div class="space-y-3">
+                    @forelse($notifications as $notification)
+                    <div class="flex items-start p-4 rounded-lg border 
+                        @if($notification->data['status'] === 'approved') bg-green-50 border-green-100
+                        @elseif($notification->data['status'] === 'rejected') bg-red-50 border-red-100
+                        @else bg-blue-50 border-blue-100 @endif">
+                        <div class="flex-shrink-0 p-2 rounded-lg 
+                            @if($notification->data['status'] === 'approved') bg-green-100 text-green-600
+                            @elseif($notification->data['status'] === 'rejected') bg-red-100 text-red-600
+                            @else bg-blue-100 text-blue-600 @endif">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if($notification->data['status'] === 'approved')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                @elseif($notification->data['status'] === 'rejected')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                @else
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                @endif
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">
+                                @if($notification->data['status'] === 'approved')
+                                Your application for Plot {{ $notification->data['plot_number'] }} has been approved!
+                                @elseif($notification->data['status'] === 'rejected')
+                                Your application for Plot {{ $notification->data['plot_number'] }} was rejected
+                                @else
+                                Application for Plot {{ $notification->data['plot_number'] }} is being processed
+                                @endif
+                            </p>
+                            <p class="text-xs @if($notification->data['status'] === 'approved') text-green-600 @elseif($notification->data['status'] === 'rejected') text-red-600 @else text-blue-600 @endif">
+                                {{ $notification->created_at->diffForHumans() }}
+                            </p>
+                            @if($notification->data['status'] === 'rejected' && isset($notification->data['reason']))
+                            <p class="text-xs text-gray-600 mt-1">
+                                <span class="font-medium">Reason:</span> {{ $notification->data['reason'] }}
+                            </p>
+                            @endif
+                        </div>
+                    </div>
+                    @empty
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-500">No notifications yet.</p>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-white rounded-lg shadow-md p-6">

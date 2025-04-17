@@ -73,6 +73,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('applications', ApplicationController::class)->only(['index', 'show', 'edit', 'update']);
+    Route::post('/applications/{application}/approve', [ApplicationController::class, 'approve'])
+        ->name('admin.applications.approve');
+    Route::post('/applications/{application}/reject', [ApplicationController::class, 'reject'])
+        ->name('admin.applications.reject');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

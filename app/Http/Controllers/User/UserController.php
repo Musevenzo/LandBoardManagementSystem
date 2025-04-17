@@ -11,20 +11,17 @@ class UserController extends Controller
 {
 
     public function dashboard()
-    {
-        $userId = Auth::id();
-
-        // Fetch applications for the authenticated user
-        $applications = Application::where('user_id', $userId)->get();
-
-        // Calculate statistics
-        $totalApplications = $applications->count();
-        $pendingApplications = $applications->where('status', 'pending')->count();
-        $approvedApplications = $applications->where('status', 'approved')->count();
-
-        // Pass data to the view
-        return view('user.dashboard', compact('totalApplications', 'pendingApplications', 'approvedApplications'));
-    }
+{
+    $user = auth()->user();
+    
+    return view('user.dashboard', [
+        'totalApplications' => $user->applications()->count(),
+        'pendingApplications' => $user->applications()->where('status', 'pending')->count(),
+        'approvedApplications' => $user->applications()->where('status', 'approved')->count(),
+        'notifications' => $user->notifications()->latest()->take(5)->get(),
+        'unreadNotificationsCount' => $user->unreadNotifications()->count(),
+    ]);
+}
 
     /**
      * Display a listing of the resource.

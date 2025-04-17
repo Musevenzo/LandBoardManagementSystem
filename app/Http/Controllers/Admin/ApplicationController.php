@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
-use App\Models\Plot;
 use Illuminate\Http\Request;
+use App\Notifications\ApplicationProcessed; // Ensure this notification class exists
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
@@ -14,31 +15,21 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Application::with('user');
-        
-        // Apply search filter
+        $applications = Application::query();
+
+        // Apply filters if provided
         if ($request->filled('search') && $request->filled('field')) {
             $field = $request->input('field');
             $search = $request->input('search');
-            
-            if ($field === 'id') {
-                $query->where('id', 'LIKE', "%{$search}%");
-            } elseif ($field === 'applicant') {
-                $query->whereHas('user', function($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%");
-                });
-            } elseif (in_array($field, ['omang', 'location'])) {
-                $query->where($field, 'LIKE', "%{$search}%");
-            }
+            $applications->where($field, 'LIKE', "%{$search}%");
         }
-        
-        // Apply status filter
+
         if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
+            $applications->where('status', $request->input('status'));
         }
-        
-        $applications = $query->latest()->paginate(10);
-        
+
+        $applications = $applications->with('user')->paginate(10);
+
         return view('admin.applications', compact('applications'));
     }
 
@@ -47,7 +38,7 @@ class ApplicationController extends Controller
      */
     public function create()
     {
-        //
+        // You can implement this method if needed
     }
 
     /**
@@ -55,7 +46,7 @@ class ApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // You can implement this method if needed
     }
 
     /**
@@ -64,7 +55,6 @@ class ApplicationController extends Controller
     public function show($id)
     {
         $application = Application::findOrFail($id);
-        // Update the view path to locate the file in the correct directory
         return view('admin.show', compact('application'));
     }
 
@@ -74,7 +64,6 @@ class ApplicationController extends Controller
     public function edit($id)
     {
         $application = Application::findOrFail($id);
-        // Update the view path to locate the file in the correct directory
         return view('admin.edit', compact('application'));
     }
 
@@ -90,6 +79,11 @@ class ApplicationController extends Controller
 
         $application->update(['status' => $request->status]);
 
+        // Send notification to user if status is updated to 'approved'
+        if ($request->status === 'approved') {
+            $application->user->notify(new ApplicationProcessed($application));
+        }
+
         return redirect()->route('admin.applications.index')->with('success', 'Application status updated successfully.');
     }
 
@@ -100,7 +94,28 @@ class ApplicationController extends Controller
     {
         $application = Application::findOrFail($id);
         $application->delete();
-        return redirect()->route('admin.applications')->with('success', 'Application deleted successfully');
-    
+        return redirect()->route('admin.applications.index')->with('success', 'Application deleted successfully');
+    }
+
+    /**
+     * Reject an application with a reason.
+     */
+    public function reject(Request $request, Application $application)
+    {
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|max:255',
+        ]);
+
+        $application->update([
+            'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+            'processed_by' => Auth::id(),
+            'processed_at' => now(),
+        ]);
+
+        // Send notification to user
+        $application->user->notify(new ApplicationProcessed($application));
+
+        return redirect()->back()->with('success', 'Application rejected successfully');
     }
 }
