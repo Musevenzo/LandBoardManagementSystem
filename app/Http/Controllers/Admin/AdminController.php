@@ -29,6 +29,11 @@ class AdminController extends Controller
             ->take(5) // Limit to 5 recent applications
             ->get();
 
+        $plot = User::with(['plot']) // Assuming relationships are defined
+            // ->where('user_id',)
+            // ->orderBy('created_at', 'desc') // Limit to 5 recent applications
+            ->get();
+
         // Fetch recent activities
         $recentActivities = Activity::orderBy('created_at', 'desc')->take(5)->get();
 
@@ -38,7 +43,8 @@ class AdminController extends Controller
             'total_plots',
             'pending_applications',
             'recentApplications',
-            'recentActivities'
+            'recentActivities',
+            'plot'
         ));
     }
 

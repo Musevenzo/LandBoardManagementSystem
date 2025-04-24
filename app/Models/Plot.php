@@ -20,4 +20,9 @@ class Plot extends Model
     {
         return $this->hasMany(Application::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -85,7 +85,7 @@
                 <div class="ml-3">
                     <p class="text-sm font-medium text-gray-700">
                         @if($application->status === 'approved')
-                            You have approved {{ $application->user->name }}'s application for Plot #{{ $application->plot ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
+                            You have approved {{ $application->user->name }}'s application for Plot #{{ $user->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
                         @elseif($application->status === 'rejected')
                             You have rejected {{ $application->user->name }}'s application for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
                         @else

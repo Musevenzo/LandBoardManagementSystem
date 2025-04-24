@@ -70,5 +70,10 @@ public function applications()
     {
         return $this->hasMany(Application::class);
     }
+
+    public function plot()
+    {
+        return $this->hasMany(Plot::class);
+    }
     
 }
