@@ -25,4 +25,9 @@ class Plot extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function allocatedUser()
+    {
+        return $this->belongsTo(User::class, 'allocated_to');
+    }
 }

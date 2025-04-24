@@ -45,13 +45,17 @@ class ReportController extends Controller
         return view('admin.reports.user-activity', compact('users'));
     }
 
-    public function applicationStatus()
+    public function applicationStatus(Request $request)
     {
-        // Fetch application status data from the database
-        $applications = Application::with('user', 'plot')
-            ->select('id', 'user_id', 'plot_id', 'status', 'created_at')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Application::query();
+
+        // Filter by month and year
+        if ($request->filled('month') && $request->filled('year')) {
+            $query->whereMonth('created_at', $request->month)
+                  ->whereYear('created_at', $request->year);
+        }
+
+        $applications = $query->with(['user', 'plot'])->paginate(10);
 
         return view('admin.reports.application-status', compact('applications'));
     }
@@ -59,9 +63,8 @@ class ReportController extends Controller
     public function plotAllocation()
     {
         // Fetch plot allocation data from the database
-        $plots = Plot::with('applications.user')
-            ->select('id', 'plot_number', 'location_name', 'allocated_to', 'created_at')
-            ->orderBy('created_at', 'desc')
+        $plots = Plot::select('id', 'plot_number', 'location', 'allocated_to', 'created_at')
+            ->with('applications')
             ->paginate(10);
 
         return view('admin.reports.plot-allocation', compact('plots'));
