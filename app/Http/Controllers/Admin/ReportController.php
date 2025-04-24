@@ -37,10 +37,23 @@ class ReportController extends Controller
         return view('admin.reports.index', compact('reports'));
     }
     
-    public function userActivity()
+    public function userActivity(Request $request)
     {
-        // Fetch user activity data from the database
-        $users = User::select('id', 'name', 'email', 'created_at')->orderBy('created_at', 'desc')->paginate(10);
+        $query = User::query();
+
+        // Filter by month
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        // Filter by year
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
+        $users = $query->select('id', 'name', 'email', 'created_at')
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(10);
 
         return view('admin.reports.user-activity', compact('users'));
     }
@@ -49,10 +62,14 @@ class ReportController extends Controller
     {
         $query = Application::query();
 
-        // Filter by month and year
-        if ($request->filled('month') && $request->filled('year')) {
-            $query->whereMonth('created_at', $request->month)
-                  ->whereYear('created_at', $request->year);
+        // Filter by month
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        // Filter by year
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
         }
 
         $applications = $query->with(['user', 'plot'])->paginate(10);
@@ -60,12 +77,21 @@ class ReportController extends Controller
         return view('admin.reports.application-status', compact('applications'));
     }
 
-    public function plotAllocation()
+    public function plotAllocation(Request $request)
     {
-        // Fetch plot allocation data from the database
-        $plots = Plot::select('id', 'plot_number', 'location', 'allocated_to', 'created_at')
-            ->with('applications')
-            ->paginate(10);
+        $query = Plot::query();
+
+        // Filter by month
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        // Filter by year
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
+        $plots = $query->with(['applications', 'allocatedUser'])->paginate(10);
 
         return view('admin.reports.plot-allocation', compact('plots'));
     }
