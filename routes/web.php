@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\PlotController;
 use App\Http\Controllers\User\ApplicationController as UserApplicationController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Admin\ReportController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -22,7 +23,15 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
     // Admin Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
+        
+    // Reports route
+        Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+        
+        // Individual report routes
+    Route::get('/admin/reports/user-activity', [ReportController::class, 'userActivity'])->name('admin.reports.user-activity');
+    Route::get('/admin/reports/application-status', [ReportController::class, 'applicationStatus'])->name('admin.reports.application-status');
+    Route::get('/admin/reports/plot-allocation', [ReportController::class, 'plotAllocation'])->name('admin.reports.plot-allocation');
+    
     // Admin-Users
     Route::resource('users', UsersController::class)->names([
         'index' => 'admin.users.index',

@@ -14,15 +14,16 @@
             
 
             @if (auth()->user()->role === App\Enums\UserRole::Admin)
-                <!-- Admin Sidebar Content -->
-                <flux:navlist variant="outline">
-                    <flux:navlist.group :heading="__('Platform')" class="grid">
-                        <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                        <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
-                        <flux:navlist.item icon="document" :href="route('admin.applications.index')" :current="request()->routeIs('admin.applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
-                        <flux:navlist.item icon="home" :href="route('admin.plots.index')" :current="request()->routeIs('admin.plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
-                    </flux:navlist.group>
-                </flux:navlist>
+            <flux:navlist variant="outline">
+    <flux:navlist.group :heading="__('Platform')" class="grid">
+        <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+        <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User') }}</flux:navlist.item>
+        <flux:navlist.item icon="document" :href="route('admin.applications.index')" :current="request()->routeIs('admin.applications')" wire:navigate>{{ __('Applications') }}</flux:navlist.item>
+        <flux:navlist.item icon="home" :href="route('admin.plots.index')" :current="request()->routeIs('admin.plots')" wire:navigate>{{ __('Plots') }}</flux:navlist.item>
+        <!-- Add Reports Section -->
+        <flux:navlist.item icon="document" :href="route('admin.reports.index')" :current="request()->routeIs('admin.reports')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
+    </flux:navlist.group>
+</flux:navlist>
             @endif
             
             @if (auth()->user()->role === App\Enums\UserRole::User)
