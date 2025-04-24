@@ -1,5 +1,13 @@
 <x-layouts.app title="User Activity Report">
     <div class="flex h-full w-full flex-1 flex-col gap-6 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-blue-50">
+        <!-- Back to Reports Dashboard -->
+        <a href="{{ route('admin.reports.index') }}" class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Reports Dashboard
+        </a>
+
         <h1 class="text-2xl font-bold text-blue-800">User Activity Report</h1>
 
         <!-- Filter Section -->
