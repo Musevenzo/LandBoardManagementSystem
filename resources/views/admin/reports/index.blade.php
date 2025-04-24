@@ -1,5 +1,6 @@
 <x-layouts.app title="Admin Reports">
-    <div class="flex h-full w-full flex-1 flex-col gap-6 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-blue-50">
+    <div class="flex h-full w-full flex-1 flex-col gap-6 p-6 rounded-xl bg-gradient-to-br from-gray-50 to-blue-50" 
+         style="background-image: url('{{ asset('images/report-background.png') }}'); background-size: cover; background-position: center;">
         <!-- Page Header with Logo -->
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-4">
