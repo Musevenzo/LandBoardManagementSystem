@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('size', 10, 2); // assuming size is a decimal number
             $table->string('status');
             $table->text('description')->nullable();
+            $table->unsignedBigInteger('user_id')->default(1); // Default to user ID 1
             $table->timestamps();
         });
     }
@@ -26,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('plots', function (Blueprint $table) {
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('plots');
     }
 };
