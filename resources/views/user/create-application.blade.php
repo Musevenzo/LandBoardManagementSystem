@@ -89,29 +89,33 @@
                                 <fieldset class="mt-4">
                                     <legend class="sr-only">Location</legend>
                                     <div class="space-y-4">
-                                        <div class="flex items-center">
-                                            <input id="gaborone" name="location" type="radio" value="Gaborone" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                                            <label for="gaborone" class="ml-3 block text-sm font-medium text-gray-700">Gaborone</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input id="francistown" name="location" type="radio" value="Francistown" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                                            <label for="francistown" class="ml-3 block text-sm font-medium text-gray-700">Francistown</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input id="maun" name="location" type="radio" value="Maun" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                                            <label for="maun" class="ml-3 block text-sm font-medium text-gray-700">Maun</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input id="kasane" name="location" type="radio" value="Kasane" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                                            <label for="kasane" class="ml-3 block text-sm font-medium text-gray-700">Kasane</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input id="serowe" name="location" type="radio" value="Serowe" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
-                                            <label for="serowe" class="ml-3 block text-sm font-medium text-gray-700">Serowe</label>
-                                        </div>
+                                        @foreach ($all_plots as $plot)
+                                            <div class="flex items-center">
+                                                <input id="location" name="location" type="radio" value="Gaborone" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" required>
+                                                <label for="location" class="ml-3 block text-sm font-medium text-gray-700">{{ $plot->location}}</label>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </fieldset>
                             </div>
+
+                            {{-- Available Plots  --}}
+                            <div>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Available Plots</h3>
+                                <div>
+                                    @if($plots->isempty()) 
+                                        No Available Plots at the moment. Check later
+                                    @else
+                                        <select name="plot_id" id="plot_id" required>
+                                            <option value="">Select Plot</option>
+                                            @foreach ($plots as $plot)
+                                                <option value="{{ $plot->id}}">{{ $plot->plot_number ?? "N/A"}} {{ $plot->location}}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+
                             <!-- Spouse Information (conditional) -->
                             <div id="spouse-info" class="sm:col-span-6 hidden">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Spouse Information</h3>

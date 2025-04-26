@@ -9,13 +9,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use function Pest\Laravel\get;
+
 class ApplicationController extends Controller
 {
 
        //hellen
        public function create()
        {
-           return view('user.create-application');
+
+           $plots = Plot::where('status', 'available')->get();
+           $all_plots = Plot::get();
+           
+           return view('user.create-application', compact(
+            'plots',
+            'all_plots',
+           ));
        }
 
        //new changes 
@@ -42,6 +51,7 @@ class ApplicationController extends Controller
                'proof_of_payment' => 'required|file|mimes:pdf,jpg,png|max:5120',
                'additional_documents.*' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
                'terms_agreement' => 'required|accepted',
+               'plot_id' => 'required',
            ]);
 
     
