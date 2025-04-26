@@ -30,8 +30,6 @@ class AdminController extends Controller
             ->get();
 
         $plot = User::with(['plot']) // Assuming relationships are defined
-            // ->where('user_id',)
-            // ->orderBy('created_at', 'desc') // Limit to 5 recent applications
             ->get();
 
         // Fetch recent activities
