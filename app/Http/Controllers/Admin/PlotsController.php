@@ -65,7 +65,7 @@ class PlotsController extends Controller
     public function edit(string $id)
     {
         $plot = Plot::findOrFail($id);
-        return view('admin.plots', compact('plot'));
+        return view('admin.plot-edit', compact('plot'));
     }
 
     /**
