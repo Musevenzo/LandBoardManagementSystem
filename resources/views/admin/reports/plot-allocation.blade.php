@@ -61,7 +61,12 @@
                     <td class="px-4 py-3 text-sm text-gray-700">{{ $plot->plot_number }}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">{{ $plot->location }}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">
-                        {{ $plot->allocatedUser ? $plot->allocatedUser->name : 'Not Allocated' }}
+                        @if ($plot->user->name === 'Admin')
+                            {{ 'Not Allocated' }}
+                        @else
+                            {{ $plot->user->name ?? 'Not Allocated' }}
+                        @endif
+
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-700">
                         <span class="px-2 py-1 rounded-full text-xs font-medium 
