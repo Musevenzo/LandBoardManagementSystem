@@ -71,21 +71,21 @@ class ApplicationController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        $application = Application::findOrFail($id);
-        $request->validate([
-            'status' => 'required|in:pending,approved,rejected',
-        ]);
+{
+    $request->validate([
+        'status' => 'required|in:approved,rejected',
+        'rejection_reason' => 'required_if:status,rejected|nullable|string',
+    ]);
 
-        $application->update(['status' => $request->status]);
+    $application = Application::findOrFail($id);
 
-        // Send notification to user if status is updated to 'approved'
-        if ($request->status === 'approved') {
-            $application->user->notify(new ApplicationProcessed($application));
-        }
+    $application->update([
+        'status' => $request->status,
+        'rejection_reason' => $request->status === 'rejected' ? $request->rejection_reason : null,
+    ]);
 
-        return redirect()->route('admin.applications.index')->with('success', 'Application status updated successfully.');
-    }
+    return redirect()->back()->with('success', 'Application updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.

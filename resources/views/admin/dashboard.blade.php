@@ -59,52 +59,55 @@
         </div>
 
         <!-- Notifications Section -->
-<div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-6">
-    <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-            Notifications
-        </h3>
-        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{{ $pending_applications }} Pending</span>
-    </div>
-    <div class="space-y-3">
-        <!-- Render dynamic notifications here -->
-        @if(isset($recentApplications) && count($recentApplications) > 0)
-            @foreach($recentApplications as $application)
-            <div class="flex items-center p-4 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-50/50 rounded-lg border border-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 hover:bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100/30 transition-colors">
-                <div class="flex-shrink-0 p-2 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 rounded-lg">
-                    <svg class="w-5 h-5 text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        @if($application->status === 'approved')
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        @elseif($application->status === 'rejected')
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        @else
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        @endif
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-700">
-                        @if($application->status === 'approved')
-                            You have approved {{ $application->user->name }}'s application for Plot #{{ $user->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
-                        @elseif($application->status === 'rejected')
-                            You have rejected {{ $application->user->name }}'s application for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
-                        @else
-                            New application from {{ $application->user->name }} for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
-                        @endif
-                    </p>
-                    <p class="text-xs text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600 font-medium">
-                        {{ $application->created_at->diffForHumans() }}
-                    </p>
-                </div>
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                    Notifications
+                </h3>
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{{ $pending_applications }} Pending</span>
             </div>
-            @endforeach
-        @else
-            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                <p class="text-sm text-gray-500">No recent applications found.</p>
+            <div class="space-y-3">
+                <!-- Render dynamic notifications here -->
+                @if(isset($recentApplications) && count($recentApplications) > 0)
+                    @foreach($recentApplications as $application)
+                    <div class="flex items-center p-4 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-50/50 rounded-lg border border-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 hover:bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100/30 transition-colors">
+                        <div class="flex-shrink-0 p-2 bg-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-100 rounded-lg">
+                            <svg class="w-5 h-5 text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if($application->status === 'approved')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                @elseif($application->status === 'rejected')
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                @else
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                @endif
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">
+                                @if($application->status === 'approved')
+                                    You have approved {{ $application->user->name }}'s application for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
+                                @elseif($application->status === 'rejected')
+                                    You have rejected {{ $application->user->name }}'s application for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
+                                    @if($application->rejection_reason)
+                                        <br><strong>Reason:</strong> {{ ucfirst(str_replace('_', ' ', $application->rejection_reason)) }}
+                                    @endif
+                                @else
+                                    New application from {{ $application->user->name }} for Plot #{{ $application->plot->plot_number ?? 'N/A' }} at {{ $application->plot->location_name ?? 'N/A' }}.
+                                @endif
+                            </p>
+                            <p class="text-xs text-{{ $application->status === 'approved' ? 'green' : ($application->status === 'rejected' ? 'red' : 'blue') }}-600 font-medium">
+                                {{ $application->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                    </div>
+                    @endforeach
+                @else
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-500">No recent applications found.</p>
+                    </div>
+                @endif
             </div>
-        @endif
-    </div>
-</div>
+        </div>
 
         <!-- Footer -->
         <footer class="mt-auto text-center text-gray-500 text-sm">
