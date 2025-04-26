@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('plots', function (Blueprint $table) {
             $table->id();
+            $table->string('plot_number')->unique(); // Ensure this column is defined
             $table->string('location');
-            $table->decimal('size', 10, 2); // assuming size is a decimal number
+            $table->integer('size');
             $table->string('status');
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('user_id')->default(1); // Default to user ID 1
+            $table->unsignedBigInteger('user_id')->nullable(); // Allow NULL values if optional
             $table->timestamps();
         });
     }
@@ -25,11 +25,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::table('plots', function (Blueprint $table) {
-            $table->dropColumn('user_id');
-        });
-        Schema::dropIfExists('plots');
-    }
+    public function down()
+{
+    Schema::dropIfExists('plots');
+}
 };

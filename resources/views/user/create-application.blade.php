@@ -146,7 +146,7 @@
                                         <input id="plot_ownership" name="plot_ownership" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" required>
                                     </div>
                                     <div class="ml-3 text-sm">
-                                        <label for="plot_ownership" class="font-medium text-gray-700">I do not own any residential plot anywhere in Botswana</label>
+                                        <label for="plot_ownership" class="font-medium text-gray-700">I was not allocated any residential plot anywhere in Botswana</label>
                                     </div>
                                 </div>
                             </div>
@@ -165,9 +165,11 @@
                                     <div class="flex h-5 items-center">
                                         <input id="spouse_plot_ownership" name="spouse_plot_ownership" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                     </div>
+                                    
                                     <div class="ml-3 text-sm">
                                         <label for="spouse_plot_ownership" class="font-medium text-gray-700">My Spouse does not own a residential plot anywhere in Botswana</label>
                                     </div>
+                    
                                 </div>
                             </div>
                             <div id="spouse-never-owned-plot" class="sm:col-span-6 hidden">
