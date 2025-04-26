@@ -15,6 +15,7 @@
             </p>
         </div>
 
+        <!-- Form to Update Application Status -->
         <form action="{{ route('admin.applications.update', $application->id) }}" method="POST">
             @csrf
             @method('PUT')
