@@ -33,7 +33,8 @@ class Application extends Model
         'plot_id', 
         'purpose', 
         'status', 
-        'comments'
+        'comments',
+        'rejection_reason',
     ];
 
     protected $casts = [
