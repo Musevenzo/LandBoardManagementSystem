@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\Plot;
 use Illuminate\Http\Request;
 use App\Notifications\ApplicationProcessed; // Ensure this notification class exists
 use Illuminate\Support\Facades\Auth;
@@ -78,11 +79,19 @@ class ApplicationController extends Controller
     ]);
 
     $application = Application::findOrFail($id);
+    $plot = Plot::findorFail($application->plot_id);
 
     $application->update([
         'status' => $request->status,
         'rejection_reason' => $request->status === 'rejected' ? $request->rejection_reason : null,
     ]);
+
+    if($request->status === 'approved') {
+        $plot->update([
+            'status' => 'unavailable',
+        ]);
+    }
+    
 
     return redirect()->back()->with('success', 'Application updated successfully.');
 }
