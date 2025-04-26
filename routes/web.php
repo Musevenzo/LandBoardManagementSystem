@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PlotsController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\PlotController;
+// use App\Http\Controllers\Admin\PlotController;
 use App\Http\Controllers\User\ApplicationController as UserApplicationController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\ReportController;
@@ -89,9 +89,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('plots', PlotController::class);
-    Route::get('plots/{plot}', [PlotController::class, 'show'])->name('plot-show');
-    Route::get('plots/{plot}/edit', [PlotController::class, 'edit'])->name('plot-edit');
+    Route::resource('plots', PlotsController::class);
+    Route::get('plots/{plot}', [PlotsController::class, 'show'])->name('plot-show');
+    Route::get('plots/{plot}/edit', [PlotsController::class, 'edit'])->name('plot-edit');
 });
 
 Route::get('/admin/users/{id}', [UsersController::class, 'show'])->name('admin.users.show');
