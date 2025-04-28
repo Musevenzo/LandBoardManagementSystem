@@ -54,8 +54,16 @@
                             </div>
                             <div class="sm:col-span-3">
                                 <label for="omang_number" class="block text-sm font-medium text-gray-700">Omang/ID Number</label>
-                                <input type="text" name="omang_number" id="omang_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+                                <input type="text"
+                                     maxlength="9"
+                                     minlength="9"
+                                     pattern="^[0-9]{9}$"
+                                     inputmode="numeric"
+                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                     required
+                                     placeholder="Enter your Omang number">
                             </div>
+                            
                             <div class="sm:col-span-3">
                                 <label for="ward" class="block text-sm font-medium text-gray-700">Ward</label>
                                 <input type="text" name="ward" id="ward" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
