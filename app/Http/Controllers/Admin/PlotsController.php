@@ -105,6 +105,6 @@ class PlotsController extends Controller
     {
         $plot = Plot::findOrFail($id);
         $plot->delete();
-        return redirect()->route('admin.plots')->with('success', 'Plot deleted successfully');
+        return redirect()->route('admin.plots.index')->with('success', 'Plot deleted successfully');
     }
 }
