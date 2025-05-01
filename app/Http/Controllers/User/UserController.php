@@ -11,17 +11,25 @@ class UserController extends Controller
 {
 
     public function dashboard()
-{
-    $user = auth()->user();
-    
-    return view('user.dashboard', [
-        'totalApplications' => $user->applications()->count(),
-        'pendingApplications' => $user->applications()->where('status', 'pending')->count(),
-        'approvedApplications' => $user->applications()->where('status', 'approved')->count(),
-        'notifications' => $user->notifications()->latest()->take(5)->get(),
-        'unreadNotificationsCount' => $user->unreadNotifications()->count(),
-    ]);
-}
+    {
+        $user = auth()->user();
+        $approved_notifications = Application::where('user_id', $user->id)->get();
+        $userapplications = Application::with(['user', 'plot']) 
+            ->orderBy('created_at', 'desc')
+            ->take(5) // Limit to 5 recent applications
+            ->get();
+
+        
+        return view('user.dashboard', [
+            'totalApplications' => $user->applications()->count(),
+            'pendingApplications' => $user->applications()->where('status', 'pending')->count(),
+            'approvedApplications' => $user->applications()->where('status', 'approved')->count(),
+            'notifications' => $user->notifications()->latest()->take(5)->get(),
+            'unreadNotificationsCount' => $user->unreadNotifications()->count(),
+            'approved_notifications' => $approved_notifications,
+            'userapplications' => $userapplications
+        ]);
+    }
 
     /**
      * Display a listing of the resource.
