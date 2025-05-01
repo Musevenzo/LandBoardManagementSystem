@@ -33,6 +33,11 @@ class PlotController extends Controller
         return view('admin.plot-edit', compact('plot'));
     }
 
+    public function create() {
+
+        return view('admin.create-plots');
+    }
+
     // Update a plot's status
     public function update(Request $request, $id)
     {

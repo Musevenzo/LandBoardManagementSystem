@@ -14,11 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PlotSeeder::class);
+        $this->call(
+            AdminSeeder::class,
+            PlotSeeder::class,
+        );
 
-        Activity::create([
-            'user_id' => 1, // Replace with a valid user ID
-            'description' => 'Admin logged in',
-        ]);
+        // Activity::create([
+        //     'user_id' => 1, // Replace with a valid user ID
+        //     'description' => 'Admin logged in',
+        // ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Plot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlotsController extends Controller
 {
@@ -14,24 +15,24 @@ class PlotsController extends Controller
     public function index(Request $request)
     {
         $query = Plot::query();
-        
+
         // Apply search filter
         if ($request->filled('search') && $request->filled('field')) {
             $field = $request->input('field');
             $search = $request->input('search');
-            
+
             if (in_array($field, ['id', 'location', 'size', 'plot_number'])) {
                 $query->where($field, 'LIKE', "%{$search}%");
             }
         }
-        
+
         // Apply status filter
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
-        
+
         $plots = $query->latest()->paginate(10);
-        
+
         return view('admin.plots', compact('plots'));
     }
 
@@ -40,7 +41,7 @@ class PlotsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.create-plots');
     }
 
     /**
@@ -48,7 +49,19 @@ class PlotsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'plot_number' => 'required|string|max:255|unique:plots,plot_number',
+            'location' => 'required|string|max:255',
+            'size' => 'required|numeric|min:1',
+            'status' => 'required|in:available,allocated,reserved',
+        ]);
+
+        // Create a new plot record
+        Plot::create($validated);
+
+        // Redirect back to the plots list with a success message
+        return redirect()->route('admin.plots.index')->with('success', 'Plot created successfully.');
     }
 
     /**
@@ -83,7 +96,6 @@ class PlotsController extends Controller
         $plot->update($validated);
 
         return redirect()->route('admin.plots')->with('success', 'Plot updated successfully');
-    
     }
 
     /**
@@ -94,6 +106,5 @@ class PlotsController extends Controller
         $plot = Plot::findOrFail($id);
         $plot->delete();
         return redirect()->route('admin.plots')->with('success', 'Plot deleted successfully');
-
     }
 }

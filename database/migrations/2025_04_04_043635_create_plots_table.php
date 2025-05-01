@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('location');
             $table->integer('size');
             $table->string('status');
-            $table->unsignedBigInteger('user_id')->nullable(); // Allow NULL values if optional
+            $table->unsignedBigInteger('user_id')->default(0)->nullable(); // Allow NULL values if optional
             $table->timestamps();
         });
     }
